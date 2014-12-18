@@ -2,13 +2,33 @@
 :-retractall(brett(_,_)).
 :-[laskazug].
 
-züge(Farbe) :-
-	write('Mögliche Züge: '),
-	nl,
-	sprünge(Farbe).
-züge(Farbe) :-
-	züg(Farbe).
+:- dynamic
+	zugmöglichkeit/2.
+:- dynamic
+	sprungmöglichkeit/2.
 
+
+
+züge(Farbe) :-
+	retractall(sprungmöglichkeit(_,_)),
+	write('Mögliche Züge werden berechnet... '),
+	nl,
+	sprünge(Farbe),fail.
+
+züge(Farbe) :-
+	retractall(zugmöglichkeit(_,_)),
+	züg(Farbe),fail.
+
+züge(_) :-
+	write('Berechnung abgeschlossen'),nl,
+	(
+	sprungmöglichkeit(S,Z),
+	write(S),write(Z)
+        );
+	zugmöglichkeit(S2,Z2),
+	write(S2),write(Z2),nl,fail.
+
+züge(_) :- true.
 
 sprünge(Head) :-
 	brett(LFeld,[]),
@@ -19,11 +39,7 @@ sprünge(Head) :-
 	    nachbarn(LFeld,OFeld,FFeld);
 	    nachbarn(FFeld,OFeld,LFeld)
 	),
-	write(FFeld),
-	write('-->'),
-	write(LFeld),
-	write(' über '),
-	write(OFeld).
+	assert(sprungmöglichkeit(FFeld,LFeld)).
 
 züg(Head) :-
 	brett(LFeld,[]),
@@ -32,9 +48,8 @@ züg(Head) :-
 	    nachbarn(LFeld,FFeld,_);
 	    nachbarn(FFeld,LFeld,_)
 	),
-	write(FFeld),
-	write('-->'),
-	write(LFeld).
+	assert(zugmöglichkeit(FFeld,LFeld)).
+
 
 
 zieh :-
