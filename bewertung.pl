@@ -1,20 +1,25 @@
 :-[board].
+:-[config].
 
 addiereSteinWert(schwarz,Feld,Summand,Summe):-
 	brett(Feld,[s|_]),
-	Summe is Summand + 1.
+	config(wert_bauer,Wert),
+	Summe is Summand + Wert.
 
 addiereSteinWert(schwarz,Feld,Summand,Summe):-
 	brett(Feld,[r|_]),
-	Summe is Summand + 3.
+	config(wert_offizier,Wert),
+	Summe is Summand + Wert.
 
 addiereSteinWert(weiss,Feld,Summand,Summe):-
 	brett(Feld,[w|_]),
-	Summe is Summand + 1.
+	config(wert_bauer,Wert),
+	Summe is Summand + Wert.
 
 addiereSteinWert(weiss,Feld,Summand,Summe):-
 	brett(Feld,[g|_]),
-	Summe is Summand + 3.
+	config(wert_bauer,Wert),
+	Summe is Summand + Wert.
 
 addiereSteinWert(_,_,Summand,Summand).
 
