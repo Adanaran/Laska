@@ -1,2 +1,3 @@
-config(wert_bauer,2):-!.
+config(wert_bauer,1):-!.
 config(wert_offizier,3):-!.
+config(wert_rand,1):-!.
