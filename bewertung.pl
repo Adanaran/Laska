@@ -23,6 +23,25 @@ addiereSteinWert(weiss,Feld,Summand,Summe):-
 
 addiereSteinWert(_,_,Summand,Summand).
 
+addiereRandWert(schwarz,Feld,Summand,Summe):-
+	(
+          brett(Feld,[s|_]);
+          brett(Feld,[r|_])
+        ),
+	config(wert_rand,Wert),
+	Summe is Summand + Wert,
+	true.
+
+addiereRandWert(weiss,Feld,Summand,Summe):-
+	(
+          brett(Feld,[w|_]);
+          brett(Feld,[g|_])
+        ),
+	config(wert_rand,Wert),
+	Summe is Summand + Wert,
+	true.
+
+addiereRandWert(_,_,Summand,Summand).
 
 % Startprädikat bewerte(+farbe,-bewertung).
 % Bewertet das aktuelle Brett
@@ -52,4 +71,19 @@ bewerte(Farbe,Bewertung):-
 	addiereSteinWert(Farbe,g1,Zwischen21,Zwischen22),
 	addiereSteinWert(Farbe,g3,Zwischen22,Zwischen23),
 	addiereSteinWert(Farbe,g5,Zwischen23,Zwischen24),
-	addiereSteinWert(Farbe,g7,Zwischen24,Bewertung),!.
+	addiereSteinWert(Farbe,g7,Zwischen24,Zwischen25),
+
+	addiereRandWert(Farbe,a1,Zwischen25,Zwischen26),
+	addiereRandWert(Farbe,a3,Zwischen26,Zwischen27),
+	addiereRandWert(Farbe,a5,Zwischen27,Zwischen28),
+	addiereRandWert(Farbe,a7,Zwischen28,Zwischen29),
+	addiereRandWert(Farbe,c7,Zwischen29,Zwischen30),
+	addiereRandWert(Farbe,e7,Zwischen30,Zwischen31),
+	addiereRandWert(Farbe,g7,Zwischen31,Zwischen32),
+	addiereRandWert(Farbe,g5,Zwischen32,Zwischen33),
+	addiereRandWert(Farbe,g3,Zwischen33,Zwischen34),
+	addiereRandWert(Farbe,g1,Zwischen34,Zwischen35),
+	addiereRandWert(Farbe,e1,Zwischen35,Zwischen36),
+	addiereRandWert(Farbe,c1,Zwischen36,Bewertung),!,
+
+	true.
