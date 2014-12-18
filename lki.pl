@@ -1,4 +1,6 @@
 :-[laskazug].
+:-retractall(brett(_,_)).
+:-[laskazug].
 
 züge(Farbe) :-
 	write('Mögliche Züge: '),
@@ -13,7 +15,10 @@ sprünge(Head) :-
 	brett(FFeld,[Head|_]),
 	opponent(Head,Opp),
 	brett(OFeld,[Opp|_]),
-	nachbarn(LFeld,OFeld,FFeld),
+	(
+	    nachbarn(LFeld,OFeld,FFeld);
+	    nachbarn(FFeld,OFeld,LFeld)
+	),
 	write(FFeld),
 	write('-->'),
 	write(LFeld),
@@ -23,7 +28,10 @@ sprünge(Head) :-
 züg(Head) :-
 	brett(LFeld,[]),
 	brett(FFeld,[Head|_]),
-	nachbarn(LFeld,FFeld,_),
+	(
+	    nachbarn(LFeld,FFeld,_);
+	    nachbarn(FFeld,LFeld,_)
+	),
 	write(FFeld),
 	write('-->'),
 	write(LFeld).
