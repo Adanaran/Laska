@@ -24,16 +24,34 @@ züge(_,_) :-
 	nl,
 	(
 	sprungmöglichkeit(S,Z),
-	write(S),write(Z),nl
+	write(S),write(Z),nl,fail
         );
 	(
 	zugmöglichkeit(S2,Z2),
-	write(S2),write(Z2),nl
-	),
-	fail.
+	write(S2),write(Z2),nl,fail
+	).
 
 züge(_,Liste) :-
-	listeZüge([],Liste),!.
+	(listeSprünge([],Liste),
+	 \+Liste == [],
+	 write(Liste)
+	),
+	!;
+	(
+	    listeZüge([],Liste2),
+	    write(Liste2),
+	    Liste = Liste2
+	),
+	!.
+
+listeSprünge(ListeVorhanden, ListeErgebnis) :-
+	sprungmöglichkeit(S,Z),
+	atom_concat(S,Z,Zug),
+	\+member(Zug,ListeVorhanden),
+	append(ListeVorhanden, [Zug], ListeNeu),
+	listeSprünge(ListeNeu,ListeErgebnis).
+
+listeSprünge(L,L).
 
 listeZüge(ListeVorhanden, ListeErgebnis) :-
 	zugmöglichkeit(S,Z),
@@ -42,7 +60,8 @@ listeZüge(ListeVorhanden, ListeErgebnis) :-
 	append(ListeVorhanden, [Zug], ListeNeu),
 	listeZüge(ListeNeu,ListeErgebnis).
 
-listeZüge(ListeVorhanden,ListeVorhanden).
+listeZüge(L,L).
+
 
 sprünge(Head) :-
 	brett(LFeld,[]),
