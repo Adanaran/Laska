@@ -29,8 +29,7 @@ addiereRandWert(schwarz,Feld,Summand,Summe):-
           brett(Feld,[r|_])
         ),
 	config(wert_rand,Wert),
-	Summe is Summand + Wert,
-	true.
+	Summe is Summand + Wert.
 
 addiereRandWert(weiss,Feld,Summand,Summe):-
 	(
@@ -38,15 +37,37 @@ addiereRandWert(weiss,Feld,Summand,Summe):-
           brett(Feld,[g|_])
         ),
 	config(wert_rand,Wert),
-	Summe is Summand + Wert,
-	true.
+	Summe is Summand + Wert.
 
 addiereRandWert(_,_,Summand,Summand).
+
+addiereTurmWert(schwarz,Feld,Summand,Summe):-
+	(
+          brett(Feld,[s,s|_]);
+          brett(Feld,[s,r|_]);
+          brett(Feld,[r,r|_]);
+          brett(Feld,[r,s|_])
+        ),
+	config(wert_doppelTurm,Wert),
+	Summe is Summand + Wert.
+
+addiereTurmWert(weiss,Feld,Summand,Summe):-
+	(
+          brett(Feld,[w,w|_]);
+          brett(Feld,[w,g|_]);
+          brett(Feld,[g,g|_]);
+          brett(Feld,[g,w|_])
+        ),
+	config(wert_doppelTurm,Wert),
+	Summe is Summand + Wert.
+
+addiereTurmWert(_,_,Summand,Summand).
+
 
 % Startprädikat bewerte(+farbe,-bewertung).
 % Bewertet das aktuelle Brett
 bewerte(Farbe,Bewertung):-
-	%Steinsumme berechnen
+	%Steinsumme berechnen - Mehr Steine sind immer gut
 	addiereSteinWert(Farbe,a1,0,Zwischen1),
 	addiereSteinWert(Farbe,a3,Zwischen1,Zwischen2),
 	addiereSteinWert(Farbe,a5,Zwischen2,Zwischen3),
@@ -73,6 +94,7 @@ bewerte(Farbe,Bewertung):-
 	addiereSteinWert(Farbe,g5,Zwischen23,Zwischen24),
 	addiereSteinWert(Farbe,g7,Zwischen24,Zwischen25),
 
+	%Randfelder berechnen - Diese sind als Defenive gut
 	addiereRandWert(Farbe,a1,Zwischen25,Zwischen26),
 	addiereRandWert(Farbe,a3,Zwischen26,Zwischen27),
 	addiereRandWert(Farbe,a5,Zwischen27,Zwischen28),
@@ -84,6 +106,33 @@ bewerte(Farbe,Bewertung):-
 	addiereRandWert(Farbe,g3,Zwischen33,Zwischen34),
 	addiereRandWert(Farbe,g1,Zwischen34,Zwischen35),
 	addiereRandWert(Farbe,e1,Zwischen35,Zwischen36),
-	addiereRandWert(Farbe,c1,Zwischen36,Bewertung),!,
+	addiereRandWert(Farbe,c1,Zwischen36,Zwischen37),!,
+
+	%Türme die beim Schlag die Farbe nicht wechseln sind gut
+	addiereTurmWert(Farbe,a1,Zwischen37,Zwischen38),
+	addiereTurmWert(Farbe,a3,Zwischen38,Zwischen39),
+	addiereTurmWert(Farbe,a5,Zwischen39,Zwischen40),
+	addiereTurmWert(Farbe,a7,Zwischen40,Zwischen41),
+	addiereTurmWert(Farbe,b2,Zwischen41,Zwischen42),
+	addiereTurmWert(Farbe,b4,Zwischen42,Zwischen43),
+	addiereTurmWert(Farbe,b6,Zwischen43,Zwischen44),
+	addiereTurmWert(Farbe,c1,Zwischen44,Zwischen45),
+	addiereTurmWert(Farbe,c3,Zwischen45,Zwischen46),
+	addiereTurmWert(Farbe,c5,Zwischen46,Zwischen47),
+	addiereTurmWert(Farbe,c7,Zwischen47,Zwischen48),
+	addiereTurmWert(Farbe,d2,Zwischen48,Zwischen49),
+	addiereTurmWert(Farbe,d4,Zwischen49,Zwischen50),
+	addiereTurmWert(Farbe,d6,Zwischen50,Zwischen51),
+	addiereTurmWert(Farbe,e1,Zwischen51,Zwischen52),
+	addiereTurmWert(Farbe,e3,Zwischen52,Zwischen53),
+	addiereTurmWert(Farbe,e5,Zwischen53,Zwischen54),
+	addiereTurmWert(Farbe,e7,Zwischen54,Zwischen55),
+	addiereTurmWert(Farbe,f2,Zwischen55,Zwischen56),
+	addiereTurmWert(Farbe,f4,Zwischen56,Zwischen57),
+	addiereTurmWert(Farbe,f6,Zwischen57,Zwischen58),
+	addiereTurmWert(Farbe,g1,Zwischen58,Zwischen59),
+	addiereTurmWert(Farbe,g3,Zwischen59,Zwischen60),
+	addiereTurmWert(Farbe,g5,Zwischen60,Zwischen61),
+	addiereTurmWert(Farbe,g7,Zwischen61,Bewertung),!,
 
 	true.
