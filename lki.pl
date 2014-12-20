@@ -63,9 +63,9 @@ listeZüge(ListeVorhanden, ListeErgebnis) :-
 listeZüge(L,L).
 
 
-sprünge(Head) :-
+sprünge(Farbe) :-
+	selbst(Farbe,FFeld,Head),
 	brett(LFeld,[]),
-	brett(FFeld,[Head|_]),
 	opponent(Head,Opp),
 	brett(OFeld,[Opp|_]),
 	(
@@ -74,9 +74,9 @@ sprünge(Head) :-
 	),
 	assert(sprungmöglichkeit(FFeld,LFeld)).
 
-züg(Head) :-
+züg(Farbe) :-
 	brett(LFeld,[]),
-	brett(FFeld,[Head|_]),
+	selbst(Farbe,FFeld,_),
 	(
 	    nachbarn(LFeld,FFeld,_);
 	    nachbarn(FFeld,LFeld,_)
