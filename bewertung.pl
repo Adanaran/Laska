@@ -1,5 +1,13 @@
 :-[board].
 :-[config].
+:-[lki].
+
+%----------------------------------------------------------------
+% addiereSteinWert(+Farbe,+Feld,+Summand,-Summe).
+%  Addiert den Wert des Steines auf Feld, wenn es ein Stein von Farbe
+%  ist, auf Summand und gibt das Ergbnis in Summe zurück. Sollte auf dem
+%  Feld kein Stein von Farbe geben, wird Summe als Summand
+%  zurückgegeben.
 
 addiereSteinWert(schwarz,Feld,Summand,Summe):-
 	brett(Feld,[s|_]),
@@ -23,6 +31,14 @@ addiereSteinWert(weiss,Feld,Summand,Summe):-
 
 addiereSteinWert(_,_,Summand,Summand).
 
+%----------------------------------------------------------------
+% addiereRandWert(+Farbe,+Feld,+Summand,-Summe).
+%  Addiert für die Randfelder extra Werte hinzu, da diese unschlagbar
+%  sind. Es wird in Summand der Wert eines Randfeldes Feld addiert,
+%  wenn es von einem Stein von Farbe besetzt ist. Das Ergebnis wird
+%  in Summe hinterlegt. Sollte das Feld un- oder falsch besetzt sein,
+%  wird Summand als Summe zurückgegeben.
+
 addiereRandWert(schwarz,Feld,Summand,Summe):-
 	(
           brett(Feld,[s|_]);
@@ -40,6 +56,13 @@ addiereRandWert(weiss,Feld,Summand,Summe):-
 	Summe is Summand + Wert.
 
 addiereRandWert(_,_,Summand,Summand).
+
+% ------------------------------------------------------------------
+%  addiereTurmWert(+Farbe,+Feld,+Summand,-Summe).
+%   Addiert für den Turm auf Feld, dessen erste und zweiter Stein vom
+%   Spieler Farbe ist den Wert für Doppeltürme auf Summand und gibt das
+%   Ergebnis in Summe zurück. Wenn das feld leer oder kein Turm hält
+%   oder falscher Farbe ist, wird Summand als Summe zurückgegeben.
 
 addiereTurmWert(schwarz,Feld,Summand,Summe):-
 	(
@@ -63,9 +86,32 @@ addiereTurmWert(weiss,Feld,Summand,Summe):-
 
 addiereTurmWert(_,_,Summand,Summand).
 
+% ------------------------------------------------------------------------
+%  subtrahiere(+Farbe,+Summand,-Summe).
+%   Subtrahiert für jeden feindlich möglichen Zug wird von Summand die
+%   Strafe für jeden möglichen Feindzug abgezogen und in Summe
+%   gespeichert. Wenn es keine Feindzüge gibt, wird Summand in Summe
+%   gespeichert.
 
-% Startprädikat bewerte(+farbe,-bewertung).
-% Bewertet das aktuelle Brett
+subtrahiereGegnerZüge(schwarz,Summand,Summe):-
+	züge(weiss,Züge),
+	length(Züge,Anzahl_Züge),
+	config(strafe_gegnerZüge,Strafe),
+	Summe is Summand - (Anzahl_Züge * Strafe),
+	true.
+
+subtrahiereGegnerZüge(weiss,Summand,Summe):-
+	züge(schwarz,Züge),
+	length(Züge,Anzahl_Züge),
+	config(strafe_gegnerZüge,Strafe),
+	Summe is Summand - (Anzahl_Züge * Strafe),
+	true.
+
+%---------------------------------------------------------------
+%  Startprädikat bewerte(+Farbe,-Bewertung).
+%   Bewertet das aktuelle Brett von Farbe und bindet das Ergebnis an
+%   Bewertung
+
 bewerte(Farbe,Bewertung):-
 	%Steinsumme berechnen - Mehr Steine sind immer gut
 	addiereSteinWert(Farbe,a1,0,Zwischen1),
@@ -106,7 +152,7 @@ bewerte(Farbe,Bewertung):-
 	addiereRandWert(Farbe,g3,Zwischen33,Zwischen34),
 	addiereRandWert(Farbe,g1,Zwischen34,Zwischen35),
 	addiereRandWert(Farbe,e1,Zwischen35,Zwischen36),
-	addiereRandWert(Farbe,c1,Zwischen36,Zwischen37),!,
+	addiereRandWert(Farbe,c1,Zwischen36,Zwischen37),
 
 	%Türme die beim Schlag die Farbe nicht wechseln sind gut
 	addiereTurmWert(Farbe,a1,Zwischen37,Zwischen38),
@@ -133,6 +179,9 @@ bewerte(Farbe,Bewertung):-
 	addiereTurmWert(Farbe,g1,Zwischen58,Zwischen59),
 	addiereTurmWert(Farbe,g3,Zwischen59,Zwischen60),
 	addiereTurmWert(Farbe,g5,Zwischen60,Zwischen61),
-	addiereTurmWert(Farbe,g7,Zwischen61,Bewertung),!,
+	addiereTurmWert(Farbe,g7,Zwischen61,Zwischen62),
+
+	%Züge des Gegners rausrechnen
+	subtrahiereGegnerZüge(Farbe,Zwischen62,Bewertung),!,
 
 	true.
