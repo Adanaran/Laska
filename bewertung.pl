@@ -107,7 +107,7 @@ subtrahiereGegnerZüge(weiss,Summand,Summe):-
 	Summe is Summand - (Anzahl_Züge * Strafe),
 	true.
 
-%---------------------------------------------------------------
+% ---------------------------------------------------------------
 %  Startprädikat bewerte(+Farbe,-Bewertung).
 %   Bewertet das aktuelle Brett von Farbe und bindet das Ergebnis an
 %   Bewertung
@@ -185,3 +185,15 @@ bewerte(Farbe,Bewertung):-
 	subtrahiereGegnerZüge(Farbe,Zwischen62,Bewertung),!,
 
 	true.
+
+% ------------------------------------------------------------------------
+%  Startprädikat siegWertung(-Wertung).
+%   Gibt die Bewertung für die aktuelle Situation für beide Partein
+%   wieder. Dabei wird die Differenz zwischen der weissen und der
+%   schwarzen Wertung gegeben. Für schwarz ist dabei ein Wert gegen
+%   +Unendlich gut, für weiß ist ein Wert gegen -Unendlich ideal.
+
+siegWertung(Wertung):-
+	bewerte(weiss,WeissWert),
+	bewerte(schwarz,SchwarzWert),
+	Wertung is SchwarzWert - WeissWert.
