@@ -2,14 +2,6 @@
 :-retractall(brett(_,_)).
 :-[laskazug].
 
-%%	Testbrett für den Fall dass Sondersituationen gebaut werden
-%	müssen.
-%	Und das ganz bequem einkommentierbar :D
-%
-%	Aktuell: Test von Mehrfachsprüngen mit new Offizier über
-%	Offiziere und Gegner.
-%
-%:-testbrett.
 testbrett :-
 retractall(brett(_,_)),
 assert(brett(a1,[])),
@@ -21,13 +13,13 @@ assert(brett(b4,[w])),
 assert(brett(b6,[w])),
 assert(brett(c1,[])),
 assert(brett(c3,[])),
-assert(brett(c5,[])),
+assert(brett(c5,[r])),
 assert(brett(c7,[])),
 assert(brett(d2,[])),  % diese drei Felder
 assert(brett(d4,[g])), % (12, 13 und 14)
 assert(brett(d6,[w])), % sind anfangs (normalerweise) unbesetzt
 assert(brett(e1,[])),
-assert(brett(e3,[r])),
+assert(brett(e3,[])),
 assert(brett(e5,[])),
 assert(brett(e7,[])),
 assert(brett(f2,[])),
@@ -37,6 +29,14 @@ assert(brett(g1,[])),
 assert(brett(g3,[])),
 assert(brett(g5,[])),
 assert(brett(g7,[])).
+%%	Testbrett für den Fall dass Sondersituationen gebaut werden
+%	müssen.
+%	Und das ganz bequem einkommentierbar :D
+%
+%	Aktuell: Test von Mehrfachsprüngen mit einem Offizier über
+%	Offiziere und Gegner.
+%
+%:-testbrett.
 
 zieh :-
 	ziehen(schwarz,e3d4),
@@ -90,7 +90,6 @@ listeZüge(ListeVorhanden, ListeErgebnis) :-
 
 listeZüge(L,L).
 
-
 sprünge(Farbe, FFeld, LFeld, OFeld) :-
 	selbst(Farbe,FFeld,Head),               %Ermittle die aktuell belegten Felder der Farbe und deren oberste Steine
 	sprungnachbarn(Head,LFeld,OFeld,FFeld), %Ermittle mögliche Sprünge über Gegner auf Leerfelder
@@ -128,10 +127,9 @@ folgesprünge(Farbe,StartFeld,ZielFelder,FeldListe) :-
 
 folgesprünge(_,_,_,_).
 
-
 %%	Definiert einen möglichen Sprung vom UrsprungsFeld über das
-%	MittelFeld zum Zielfeld in Abhängigkeit der Farbe, um
-%	Rückwärtssprünge einzuschränken.
+%	MittelFeld zum Zielfeld in Abhängigkeit der (Kopfstein-)Farbe,
+%	um Rückwärtssprünge einzuschränken.
 sprungnachbarn(Head, ZielFeld, MittelFeld, UrsprungsFeld) :-
 	((
 	    \+Head == w,
