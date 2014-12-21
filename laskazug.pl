@@ -58,8 +58,13 @@ selbst(weiss,Feld,g) :-
 	brett(Feld,[g|_]).
 opponent(w,s).
 opponent(w,r).
+opponent(g,s).
+opponent(g,r).
+
 opponent(s,w).
 opponent(s,g).
+opponent(r,w).
+opponent(r,g).
 
 testMove(schwarz,Kopf,FeldA,FeldZ) :-
 	( nachbarn(FeldZ,FeldA,_)
