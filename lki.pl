@@ -69,17 +69,32 @@ sprünge(Farbe) :-
 	opponent(Head,Opp),
 	brett(OFeld,[Opp|_]),
 	(
-	    nachbarn(LFeld,OFeld,FFeld);
+	    (
+	    \+Head == w,
+	    nachbarn(LFeld,OFeld,FFeld)
+	)
+	    ;
+	    (
+	    \+Head == s,
 	    nachbarn(FFeld,OFeld,LFeld)
+	    )
 	),
 	assert(sprungmöglichkeit(FFeld,LFeld)).
 
 züg(Farbe) :-
 	brett(LFeld,[]),
-	selbst(Farbe,FFeld,_),
+	selbst(Farbe,FFeld,Head),
 	(
-	    nachbarn(LFeld,FFeld,_);
+	    (
+	    \+Head == w,
+	    nachbarn(LFeld,FFeld,_)
+	)
+	    ;
+	    (
+	    \+Head == s,
 	    nachbarn(FFeld,LFeld,_)
+	    )
+
 	),
 	assert(zugmöglichkeit(FFeld,LFeld)).
 
