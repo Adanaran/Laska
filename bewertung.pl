@@ -87,25 +87,55 @@ addiereTurmWert(weiss,Feld,Summand,Summe):-
 addiereTurmWert(_,_,Summand,Summand).
 
 % ------------------------------------------------------------------------
-%  subtrahiere(+Farbe,+Summand,-Summe).
-%   Subtrahiert für jeden feindlich möglichen Zug wird von Summand die
-%   Strafe für jeden möglichen Feindzug abgezogen und in Summe
-%   gespeichert. Wenn es keine Feindzüge gibt, wird Summand in Summe
-%   gespeichert.
+%  gegner(+Selbst,-Gegner).
+%   Gibt den Gegenspieler von Selbst in Gegner zurück.
 
-subtrahiereGegnerZüge(schwarz,Summand,Summe):-
-	züge(weiss,Züge),
-	length(Züge,Anzahl_Züge),
-	config(strafe_gegnerZüge,Strafe),
-	Summe is Summand - (Anzahl_Züge * Strafe),
-	true.
+gegner(weiss,schwarz).
+gegner(schwarz,weiss).
 
-subtrahiereGegnerZüge(weiss,Summand,Summe):-
-	züge(schwarz,Züge),
-	length(Züge,Anzahl_Züge),
-	config(strafe_gegnerZüge,Strafe),
-	Summe is Summand - (Anzahl_Züge * Strafe),
-	true.
+% ------------------------------------------------------------------------
+% ermittleZugLänge(+Zug,-Länge).
+%  Gibt die Länge von Zug in Anzahl der Bewegungen des Steines zurück.
+
+ermittleZugLänge(Zug,Länge):-
+	atom_length(Zug,Atom_länge),
+	Länge is ((Atom_länge - 4) / 2) + 1.
+
+% ------------------------------------------------------------------------
+%  summiereZugWerte(+ListeVonZügen,-Wert).
+%   Summiert die Werte der Züge in ListeVonZügen auf und gibt das
+%   Ergebnis in Wert zurück.
+
+summiereZugWerte([],0).
+summiereZugWerte([H|T],Wert):-
+	summiereZugWerte(T,Rest),
+	ermittleZugLänge(H,Länge),
+	config(wert_ZugLänge_x,Länge,WertZug),
+	Wert is Rest + WertZug.
+
+% ------------------------------------------------------------------------
+%  subtrahiereGegnerZüge(+Farbe,+Summand,-Summe).
+%   Subtrahiert für jeden feindlich möglichen Zug dessen Zugwert von
+%   Summand und wird in Summe gespeichert. Wenn es keine Feindzüge gibt,
+%   wird Summand in Summe gespeichert.
+
+subtrahiereGegnerZüge(Farbe,Summand,Summe):-
+	gegner(Farbe,Gegner),
+	züge(Gegner,Züge),
+	summiereZugWerte(Züge,Wert),
+	Summe is Summand - Wert.
+
+% ------------------------------------------------------------------------
+%  addiereEigeneZüge(+Farbe,+Summand,-Summe).
+%   Addiert für jeden eigenen möglichen Zug dessen Zugwert von
+%   Summand und wird in Summe gespeichert. Wenn es keine Feindzüge gibt,
+%   wird Summand in Summe gespeichert.
+
+addiereEigeneZüge(Farbe,Summand,Summe):-
+	züge(Farbe,Züge),
+	summiereZugWerte(Züge,Wert),
+	Summe is Summand + Wert.
+
 
 % ---------------------------------------------------------------
 %  Startprädikat bewerte(+Farbe,-Bewertung).
@@ -182,7 +212,10 @@ bewerte(Farbe,Bewertung):-
 	addiereTurmWert(Farbe,g7,Zwischen61,Zwischen62),
 
 	%Züge des Gegners rausrechnen
-	subtrahiereGegnerZüge(Farbe,Zwischen62,Bewertung),!,
+	subtrahiereGegnerZüge(Farbe,Zwischen62,Zwischen63),
+
+	%Eigene Züge addieren
+	addiereEigeneZüge(Farbe,Zwischen63,Bewertung),!,
 
 	true.
 
