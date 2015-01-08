@@ -153,7 +153,7 @@ summiereZugWerte(P,[H|T],Wert):-
 	Wert is Rest + WertZug,!.
 
 summiereZugWerte(P,[H|T],Wert):-
-	summiereZugWerte(T,Rest),
+	summiereZugWerte(P,T,Rest),
 	ermittleSprungL‰nge(H,L‰nge),
 	ermittle‹bersprungWert(P,H,‹berWert),
 	config(wert_SprungL‰nge_x,L‰nge,WertSprung),
