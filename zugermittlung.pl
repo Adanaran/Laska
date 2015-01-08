@@ -97,7 +97,7 @@ sprünge([Farbe|Brett], FFeld, LFeld, OFeld) :-
 	sprungnachbarn(Head,LFeld,OFeld,FFeld), %Ermittle mögliche Sprünge über Gegner auf Leerfelder
 	turmAufBrett(Brett, LFeld,[]),                        %Prüfe ob das Sprungziel leer ist
 	opponent(Opp,Head),                     %Ermittle die Art der obersten Steine des Gegners
-	turmAufBrett(OFeld,[Opp|_]),			%Prüfe ob der zu überspringende Stein ein gegnerischer ist
+	turmAufBrett(Brett, OFeld,[Opp|_]),			%Prüfe ob der zu überspringende Stein ein gegnerischer ist
 	assert(sprungmöglichkeit(FFeld,LFeld)). %Merke die Sprungmöglichkeit
 
 filterSprünge(SFeld) :-
@@ -120,7 +120,7 @@ folgesprünge([Farbe|Brett],StartFeld,ZielFelder,FeldListe) :-
 	    LFeld == StartFeld
 	),
 	opponent(Opp,Head),
-	turmAufBrett(OFeld,[Opp|_]),
+	turmAufBrett(Brett, OFeld,[Opp|_]),
 	\+member(OFeld, FeldListe),
 	atom_concat(ZielFelder,LFeld,ZFeld),
 	append(FeldListe,[OFeld],ListeNeu),
