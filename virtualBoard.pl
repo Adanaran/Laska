@@ -29,8 +29,10 @@ turmAufFeld(Brett, Koordinate, Turm) :-
 	feld(Koordinate,Index),
 	nth1(Index,Brett,Turm).
 
-virtualisiereBrett(P) :-
- findall(Turm, brett(_,Turm),P).
+virtualisiereBrett([Farbe|P]) :-
+	farbe(Farbe),
+	findall(Turm, brett(_,Turm),P).
+
 
 % ------------------------------------------------------------------------
 %  virtuellZiehen(+Farbe,+Zugfolge).
