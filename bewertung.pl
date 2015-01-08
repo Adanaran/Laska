@@ -1,6 +1,6 @@
 :-[board].
 :-[config].
-:-[lki].
+:-[zugermittlung].
 
 %----------------------------------------------------------------
 % addiereSteinWert(+Farbe,+Feld,+Summand,-Summe).
@@ -94,10 +94,10 @@ gegner(weiss,schwarz).
 gegner(schwarz,weiss).
 
 % ------------------------------------------------------------------------
-% ermittleZugLänge(+Zug,-Länge).
+% ermittleSprungLänge(+Zug,-Länge).
 %  Gibt die Länge von Zug in Anzahl der Bewegungen des Steines zurück.
 
-ermittleZugLänge(Zug,Länge):-
+ermittleSprungLänge(Zug,Länge):-
 	atom_length(Zug,Atom_länge),
 	Länge is ((Atom_länge - 4) / 2) + 1.
 
@@ -109,21 +109,26 @@ ermittleZugLänge(Zug,Länge):-
 summiereZugWerte([],0).
 summiereZugWerte([H|T],Wert):-
 	summiereZugWerte(T,Rest),
-	ermittleZugLänge(H,Länge),
-	config(wert_ZugLänge_x,Länge,WertZug),
-	Wert is Rest + WertZug.
+	istZug(H),
+	config(wert_zug,WertZug),
+	Wert is Rest + WertZug,!.
+
+summiereZugWerte([H|T],Wert):-
+	summiereZugWerte(T,Rest),
+	ermittleSprungLänge(H,Länge),
+	config(wert_SprungLänge_x,Länge,WertSprung),
+	Wert is Rest + WertSprung,!.
 
 % ------------------------------------------------------------------------
-%  subtrahiereGegnerZüge(+Farbe,+Summand,-Summe).
-%   Subtrahiert für jeden feindlich möglichen Zug dessen Zugwert von
-%   Summand und wird in Summe gespeichert. Wenn es keine Feindzüge gibt,
-%   wird Summand in Summe gespeichert.
-
-subtrahiereGegnerZüge(Farbe,Summand,Summe):-
-	gegner(Farbe,Gegner),
-	züge(Gegner,Züge),
-	summiereZugWerte(Züge,Wert),
-	Summe is Summand - Wert.
+%  istZug(+Zug)
+%   Kann unifziziert werden, wenn Zug ein einfacher Zug ohne Schlag ist.
+istZug(Zug):-
+	sub_atom(Zug,1,1,_,A1),
+	sub_atom(Zug,3,1,_,A2),
+	atom_number(A1, Z1),
+	atom_number(A2, Z2),
+	Diff is Z1 - Z2,
+	1 is abs(Diff).
 
 % ------------------------------------------------------------------------
 %  addiereEigeneZüge(+Farbe,+Summand,-Summe).
@@ -211,11 +216,8 @@ bewerte(Farbe,Bewertung):-
 	addiereTurmWert(Farbe,g5,Zwischen60,Zwischen61),
 	addiereTurmWert(Farbe,g7,Zwischen61,Zwischen62),
 
-	%Züge des Gegners rausrechnen
-	subtrahiereGegnerZüge(Farbe,Zwischen62,Zwischen63),
-
 	%Eigene Züge addieren
-	addiereEigeneZüge(Farbe,Zwischen63,Bewertung),!,
+	addiereEigeneZüge(Farbe,Zwischen62,Bewertung),!,
 
 	true.
 
