@@ -1,3 +1,4 @@
+:-[laskazug].
 feld(a1,1).
 feld(a3,2).
 feld(a5,3).
@@ -24,7 +25,15 @@ feld(g3,23).
 feld(g5,24).
 feld(g7,25).
 
-turmAufFeld(P, Koordinate, Turm) :-
+turmAufFeld(Brett, Koordinate, Turm) :-
 	feld(Koordinate,Index),
-	nth1(Index,P,Turm).
+	nth0(Index,Brett,Turm).
+
+
+virtualisiereBrett(P) :-
+ findall(Turm, brett(_,Turm),P),
+ nth0(13,P,X),
+ write(X).
+
+
 

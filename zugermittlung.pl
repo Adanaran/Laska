@@ -1,30 +1,31 @@
 :-[laskazug].
 :-retractall(brett(_,_)).
 :-[laskazug].
+:-[virtualBoard].
 
 testbrett :-
 retractall(brett(_,_)),
-assert(brett(a1,[])),
+assert(brett(a1,[w])),
 assert(brett(a3,[])),
 assert(brett(a5,[])),
 assert(brett(a7,[])),
-assert(brett(b2,[w])),
-assert(brett(b4,[w])),
-assert(brett(b6,[w])),
+assert(brett(b2,[s])),
+assert(brett(b4,[])),
+assert(brett(b6,[])),
 assert(brett(c1,[])),
 assert(brett(c3,[])),
-assert(brett(c5,[r])),
+assert(brett(c5,[])),
 assert(brett(c7,[])),
-assert(brett(d2,[])),  % diese drei Felder
-assert(brett(d4,[g])), % (12, 13 und 14)
-assert(brett(d6,[w])), % sind anfangs (normalerweise) unbesetzt
+assert(brett(d2,[s])),  % diese drei Felder
+assert(brett(d4,[])), % (12, 13 und 14)
+assert(brett(d6,[])), % sind anfangs (normalerweise) unbesetzt
 assert(brett(e1,[])),
 assert(brett(e3,[])),
 assert(brett(e5,[])),
 assert(brett(e7,[])),
 assert(brett(f2,[])),
-assert(brett(f4,[w])),
-assert(brett(f6,[w])),
+assert(brett(f4,[])),
+assert(brett(f6,[])),
 assert(brett(g1,[])),
 assert(brett(g3,[])),
 assert(brett(g5,[])),
@@ -51,19 +52,19 @@ zieh :-
 :- dynamic
 	sprungmöglichkeit/2.
 
-züge(Farbe,_) :-
+züge(P,_) :-
 	retractall(sprungmöglichkeit(_,_)),
 	write('Mögliche Züge: '),
 	nl,
-	sprünge(Farbe,FFeld, SFeld,Übersprungen),
-	folgesprünge(Farbe,FFeld,SFeld,[Übersprungen]),
+	sprünge(P,FFeld, SFeld,Übersprungen),
+	folgesprünge(P,FFeld,SFeld,[Übersprungen]),
 	filterSprünge(SFeld),
 	fail.
 
-züge(Farbe,_) :-
+züge(P,_) :-
 	retractall(zugmöglichkeit(_,_)),
 	\+sprungmöglichkeit(_,_),
-	züg(Farbe),
+	ermittleZug(P),
 	fail.
 
 züge(_,Liste) :-
@@ -91,12 +92,12 @@ listeZüge(ListeVorhanden, ListeErgebnis) :-
 
 listeZüge(L,L).
 
-sprünge(Farbe, FFeld, LFeld, OFeld) :-
+sprünge([Farbe|Brett], FFeld, LFeld, OFeld) :-
 	selbst(Farbe,FFeld,Head),               %Ermittle die aktuell belegten Felder der Farbe und deren oberste Steine
 	sprungnachbarn(Head,LFeld,OFeld,FFeld), %Ermittle mögliche Sprünge über Gegner auf Leerfelder
-	brett(LFeld,[]),                        %Prüfe ob das Sprungziel leer ist
+	turmAufBrett(Brett, LFeld,[]),                        %Prüfe ob das Sprungziel leer ist
 	opponent(Opp,Head),                     %Ermittle die Art der obersten Steine des Gegners
-	brett(OFeld,[Opp|_]),			%Prüfe ob der zu überspringende Stein ein gegnerischer ist
+	turmAufBrett(OFeld,[Opp|_]),			%Prüfe ob der zu überspringende Stein ein gegnerischer ist
 	assert(sprungmöglichkeit(FFeld,LFeld)). %Merke die Sprungmöglichkeit
 
 filterSprünge(SFeld) :-
@@ -110,16 +111,16 @@ filterSprung(U, Z1, Z2):-
 	 filterSprünge(Z1),
 	 fail.
 
-folgesprünge(Farbe,StartFeld,ZielFelder,FeldListe) :-
+folgesprünge([Farbe|Brett],StartFeld,ZielFelder,FeldListe) :-
 	selbst(Farbe,StartFeld,Head),
 	sub_atom(ZielFelder,_,2,0,ZielFeld),
 	sprungnachbarn(Head,LFeld,OFeld,ZielFeld),
 	(
-	    brett(LFeld,[]);
+	    turmAufBrett(Brett,LFeld,[]);
 	    LFeld == StartFeld
 	),
 	opponent(Opp,Head),
-	brett(OFeld,[Opp|_]),
+	turmAufBrett(OFeld,[Opp|_]),
 	\+member(OFeld, FeldListe),
 	atom_concat(ZielFelder,LFeld,ZFeld),
 	append(FeldListe,[OFeld],ListeNeu),
@@ -142,8 +143,8 @@ sprungnachbarn(Head, ZielFeld, MittelFeld, UrsprungsFeld) :-
 	    nachbarn(UrsprungsFeld,MittelFeld,ZielFeld)
 	)).
 
-züg(Farbe) :-
-	brett(LFeld,[]),
+ermittleZug([Farbe|Brett]) :-
+	turmAufFeld(Brett,LFeld,[]),
 	selbst(Farbe,FFeld,Head),
 	(
 	    (
