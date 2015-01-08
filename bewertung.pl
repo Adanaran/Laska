@@ -102,6 +102,44 @@ ermittleSprungLänge(Zug,Länge):-
 	Länge is ((Atom_länge - 4) / 2) + 1.
 
 % ------------------------------------------------------------------------
+%  turmZwischen(+Start,+Ziel,-Turm)
+%   Gibt in Turm den Turm zwischen Start und Ziel zurück.
+turmZwischen(Start,Ziel,Turm):-
+	sub_atom(Start,0,1,_,BStart),
+	sub_atom(Start,1,1,_,AStart),
+	sub_atom(Ziel,0,1,_,BZiel),
+	sub_atom(Ziel,1,1,_,AZiel),
+	buchstabeZwischen(BStart,BZiel,BZwischen),
+	atom_number(AStart, ZStart),
+	atom_number(AZiel, ZZiel),
+	ZZwischen is (ZStart + ZZiel)/2,
+	atomic_concat(BZwischen,ZZwischen,Zwischen),
+	brett(Zwischen,Turm).
+
+% ------------------------------------------------------------------------
+%  ermittleÜbersprungWert(+Zug,-Wert)
+%   Gibt den Wert in Wert zurück, den ein übersprungener Turm hat.
+%   Türme, die befreit werden, sind wertvoller.
+ermittleÜbersprungWert(Zug,Wert):-
+	sub_atom(Zug,0,2,_,F1),
+	sub_atom(Zug,2,2,_,F2),
+	turmZwischen(F1,F2,[H1,H2|_]),
+	(
+	    (H1 == w,H2 == s);
+	    (H1 == g,H2 == s);
+	    (H1 == w,H2 == r);
+	    (H1 == w,H2 == s);
+
+	    (H1 == s,H2 == w);
+	    (H1 == r,H2 == w);
+	    (H1 == s,H2 == g);
+	    (H1 == r,H2 == g)
+	),
+	config(wert_befreibarerTürme,Wert),!.
+
+ermittleÜbersprungWert(_,0).
+
+% ------------------------------------------------------------------------
 %  summiereZugWerte(+ListeVonZügen,-Wert).
 %   Summiert die Werte der Züge in ListeVonZügen auf und gibt das
 %   Ergebnis in Wert zurück.
@@ -116,8 +154,27 @@ summiereZugWerte([H|T],Wert):-
 summiereZugWerte([H|T],Wert):-
 	summiereZugWerte(T,Rest),
 	ermittleSprungLänge(H,Länge),
+	ermittleÜbersprungWert(H,ÜberWert),
 	config(wert_SprungLänge_x,Länge,WertSprung),
-	Wert is Rest + WertSprung,!.
+	Wert is Rest + WertSprung + ÜberWert,!.
+
+
+% ------------------------------------------------------------------------
+%  buchstabeZwischen(+ersterBuchstabe,+zweiterBuchstabe,-BuchstabeZwische
+%  n)
+%   Gibt den Buchstaben zwischen ersterBuchstabe und zweiterBuchstabe
+%   zurück.
+buchstabeZwischen('a','c','b').
+buchstabeZwischen('b','d','c').
+buchstabeZwischen('c','e','d').
+buchstabeZwischen('d','f','e').
+buchstabeZwischen('e','g','f').
+
+buchstabeZwischen('c','a','b').
+buchstabeZwischen('d','b','c').
+buchstabeZwischen('e','c','d').
+buchstabeZwischen('f','d','e').
+buchstabeZwischen('g','e','f').
 
 % ------------------------------------------------------------------------
 %  istZug(+Zug)
