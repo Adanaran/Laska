@@ -31,6 +31,7 @@ turmAufFeld(Brett, Koordinate, Turm) :-
 
 virtualisiereBrett([Farbe|P]) :-
 	farbe(Farbe),
+
 	brett(a1,Turm1),
 	append([],[Turm1],P2),
 	brett(a3,Turm2),
@@ -87,3 +88,23 @@ virtualisiereBrett([Farbe|P]) :-
 	append(P24,[Turm23],P25),
 	brett(g7,Turm24),
 	append(P25,[Turm24],P).
+
+% ------------------------------------------------------------------------
+%  virtuellZiehen(+Farbe,+Zugfolge).
+virtuellZiehen(Farbe,Zugfolge):-
+	atom_length(Zugfolge,L),
+	L >= 4,
+	0 is L mod 2,
+	virtuellZug(Farbe,Zugfolge,L), !,
+	true.
+
+virtuellZiehen(_,_):-
+	nl,write('Ungültige Eingabe!'),nl,nl,
+	true.
+
+virtuellZug(Farbe,Zugfolge,4):-
+	sub_atom(Zugfolge,0,2,_,FeldA),
+	sub_atom(Zugfolge,2,2,_,FeldZ),
+	FeldA \== FeldZ,
+
+	true.
