@@ -4,11 +4,11 @@
 :-[virtualBoard].
 
 %----------------------------------------------------------------
-% addiereSteinWert(+Farbe,+Feld,+Summand,-Summe).
-%  Addiert den Wert des Steines auf Feld, wenn es ein Stein von Farbe
-%  ist, auf Summand und gibt das Ergbnis in Summe zurück. Sollte auf dem
-%  Feld kein Stein von Farbe geben, wird Summe als Summand
-%  zurückgegeben.
+% addiereSteinWert(+P,+Feld,+Summand,-Summe).
+%  Addiert den Wert des Steines auf Feld von P, wenn es ein Stein von
+%  P(Farbe) ist, auf Summand und gibt das Ergbnis in Summe zurück.
+%  Sollte auf dem Feld kein Stein von Farbe geben, wird Summe als
+%  Summand zurückgegeben.
 
 addiereSteinWert([schwarz|Brett],Feld,Summand,Summe):-
 	turmAufFeld(Brett,Feld,[s|_]),
@@ -33,7 +33,7 @@ addiereSteinWert([weiss|Brett],Feld,Summand,Summe):-
 addiereSteinWert(_,_,Summand,Summand).
 
 %----------------------------------------------------------------
-% addiereRandWert(+Farbe,+Feld,+Summand,-Summe).
+% addiereRandWert(+P,+Feld,+Summand,-Summe).
 %  Addiert für die Randfelder extra Werte hinzu, da diese unschlagbar
 %  sind. Es wird in Summand der Wert eines Randfeldes Feld addiert,
 %  wenn es von einem Stein von Farbe besetzt ist. Das Ergebnis wird
@@ -59,7 +59,7 @@ addiereRandWert([weiss|Brett],Feld,Summand,Summe):-
 addiereRandWert(_,_,Summand,Summand).
 
 % ------------------------------------------------------------------
-%  addiereTurmWert(+Farbe,+Feld,+Summand,-Summe).
+%  addiereTurmWert(+P,+Feld,+Summand,-Summe).
 %   Addiert für den Turm auf Feld, dessen erste und zweiter Stein vom
 %   Spieler Farbe ist den Wert für Doppeltürme auf Summand und gibt das
 %   Ergebnis in Summe zurück. Wenn das feld leer oder kein Turm hält
@@ -103,7 +103,7 @@ ermittleSprungLänge(Zug,Länge):-
 	Länge is ((Atom_länge - 4) / 2) + 1.
 
 % ------------------------------------------------------------------------
-%  turmZwischen(+Start,+Ziel,-Turm)
+%  turmZwischen(+P,+Start,+Ziel,-Turm)
 %   Gibt in Turm den Turm zwischen Start und Ziel zurück.
 turmZwischen([_|Brett],Start,Ziel,Turm):-
 	sub_atom(Start,0,1,_,BStart),
@@ -118,7 +118,7 @@ turmZwischen([_|Brett],Start,Ziel,Turm):-
 	turmAufFeld(Brett,Zwischen,Turm).
 
 % ------------------------------------------------------------------------
-%  ermittleÜbersprungWert(+Zug,-Wert)
+%  ermittleÜbersprungWert(+P,+Zug,-Wert)
 %   Gibt den Wert in Wert zurück, den ein übersprungener Turm hat.
 %   Türme, die befreit werden, sind wertvoller.
 ermittleÜbersprungWert(P,Zug,Wert):-
@@ -141,7 +141,7 @@ ermittleÜbersprungWert(P,Zug,Wert):-
 ermittleÜbersprungWert(_,_,0).
 
 % ------------------------------------------------------------------------
-%  summiereZugWerte(+ListeVonZügen,-Wert).
+%  summiereZugWerte(P,+ListeVonZügen,-Wert).
 %   Summiert die Werte der Züge in ListeVonZügen auf und gibt das
 %   Ergebnis in Wert zurück.
 
@@ -189,21 +189,20 @@ istZug(Zug):-
 	1 is abs(Diff).
 
 % ------------------------------------------------------------------------
-%  addiereEigeneZüge(+Farbe,+Summand,-Summe).
+%  addiereEigeneZüge(+P,+Farbe,+Summand,-Summe).
 %   Addiert für jeden eigenen möglichen Zug dessen Zugwert von
 %   Summand und wird in Summe gespeichert. Wenn es keine Feindzüge gibt,
 %   wird Summand in Summe gespeichert.
 
 addiereEigeneZüge(P,Summand,Summe):-
 	züge(P,Züge),
-	summiereZugWerte(Züge,Wert),
+	summiereZugWerte(P,Züge,Wert),
 	Summe is Summand + Wert.
 
 
 % ---------------------------------------------------------------
-%  Startprädikat bewerte(+Farbe,-Bewertung).
-%   Bewertet das aktuelle Brett von Farbe und bindet das Ergebnis an
-%   Bewertung
+%  Startprädikat bewerte(+P,-Bewertung).
+%   Bewertet das P und bindet das Ergebnis an Bewertung
 
 bewerte(P,Bewertung):-
 	%Steinsumme berechnen - Mehr Steine sind immer gut
@@ -280,7 +279,7 @@ bewerte(P,Bewertung):-
 	true.
 
 % ------------------------------------------------------------------------
-%  Startprädikat siegWertung(-Wertung).
+%  Startprädikat siegWertung(+P,-Wertung).
 %   Gibt die Bewertung für die aktuelle Situation für beide Partein
 %   wieder. Dabei wird die Differenz zwischen der weissen und der
 %   schwarzen Wertung gegeben. Für schwarz ist dabei ein Wert gegen
