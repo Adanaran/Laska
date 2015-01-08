@@ -1,5 +1,5 @@
 #1 Mapping-Datei von Index der Liste auf Feld-Atome : Tim
-#2 Umstellen der Bewertung auf Liste                : Dan
+#2 (DONE) Umstellen der Bewertung auf Liste                : Dan
 #3 MiniMax Umsetzung mit Liste                      : Malte
 #4 AlphaBeta Umsetzung                              : Malte
 #5 Doppelsprünge                                    : Tim

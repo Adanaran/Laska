@@ -27,13 +27,7 @@ feld(g7,25).
 
 turmAufFeld(Brett, Koordinate, Turm) :-
 	feld(Koordinate,Index),
-	nth0(Index,Brett,Turm).
-
+	nth1(Index,Brett,Turm).
 
 virtualisiereBrett(P) :-
- findall(Turm, brett(_,Turm),P),
- nth0(13,P,X),
- write(X).
-
-
-
+ findall(Turm, brett(_,Turm),P).
