@@ -31,3 +31,23 @@ turmAufFeld(Brett, Koordinate, Turm) :-
 
 virtualisiereBrett(P) :-
  findall(Turm, brett(_,Turm),P).
+
+% ------------------------------------------------------------------------
+%  virtuellZiehen(+Farbe,+Zugfolge).
+virtuellZiehen(Farbe,Zugfolge):-
+	atom_length(Zugfolge,L),
+	L >= 4,
+	0 is L mod 2,
+	virtuellZug(Farbe,Zugfolge,L), !,
+	true.
+
+virtuellZiehen(_,_):-
+	nl,write('Ungültige Eingabe!'),nl,nl,
+	true.
+
+virtuellZug(Farbe,Zugfolge,4):-
+	sub_atom(Zugfolge,0,2,_,FeldA),
+	sub_atom(Zugfolge,2,2,_,FeldZ),
+	FeldA \== FeldZ,
+
+	true.
