@@ -90,21 +90,55 @@ virtualisiereBrett([Farbe|P]) :-
 	append(P25,[Turm24],P).
 
 % ------------------------------------------------------------------------
-%  virtuellZiehen(+Farbe,+Zugfolge).
-virtuellZiehen(Farbe,Zugfolge):-
+%  virtuellZiehen(+P,+Zugfolge,-PRes).
+virtuellZiehen([Farbe|Brett],Zugfolge,PRes):-
 	atom_length(Zugfolge,L),
 	L >= 4,
 	0 is L mod 2,
-	virtuellZug(Farbe,Zugfolge,L), !,
+	virtuellZug(Brett,Farbe,Zugfolge,L,PRes), !,
 	true.
 
-virtuellZiehen(_,_):-
+virtuellZiehen(_,_,_):-
 	nl,write('Ungültige Eingabe!'),nl,nl,
 	true.
 
-virtuellZug(Farbe,Zugfolge,4):-
+% ------------------------------------------------------------------------
+%  viertuellZug(+Brett,+Farbe,+Zugfolge,+Länge,-Ergebnis)
+virtuellZug(Brett,schwarz,Zugfolge,4,PRes):-
 	sub_atom(Zugfolge,0,2,_,FeldA),
 	sub_atom(Zugfolge,2,2,_,FeldZ),
 	FeldA \== FeldZ,
+	turmAufFeld(Brett,FeldZ,[]),
+	(
+	    turmAufFeld(Brett,FeldA,[s|_]);
+	    turmAufFeld(Brett,FeldA,[r|_])
+	),
+	feld(FeldA,IndexA),
+	feld(FeldZ,IndexZ),
 
+	nth1(IndexA,Brett,Turm,PRest),
+	nth1(IndexA,P2,[],PRest),
+
+	nth1(IndexZ,P2,_,PRest2),
+	nth1(IndexZ,PRes,Turm,PRest2),
 	true.
+
+virtuellZug(Brett,weiss,Zugfolge,4,PRes):-
+	sub_atom(Zugfolge,0,2,_,FeldA),
+	sub_atom(Zugfolge,2,2,_,FeldZ),
+	FeldA \== FeldZ,
+	turmAufFeld(Brett,FeldZ,[]),
+	(
+	    turmAufFeld(Brett,FeldA,[w|_]);
+	    turmAufFeld(Brett,FeldA,[g|_])
+	),
+	feld(FeldA,IndexA),
+	feld(FeldZ,IndexZ),
+
+	nth1(IndexA,Brett,Turm,PRest),
+	nth1(IndexA,P2,[],PRest),
+
+	nth1(IndexZ,P2,_,PRest2),
+	nth1(IndexZ,PRes,Turm,PRest2),
+	true.
+
