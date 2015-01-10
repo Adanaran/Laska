@@ -30,8 +30,8 @@ zug(Farbe,Zugfolge,4) :-
 	( testMove(Farbe,Kopf,FeldA,FeldZ), move(FeldA,FeldZ)
 	; testJump(Farbe,Kopf,FeldA,FeldZ,M), jump(FeldA,M,FeldZ)
 	), !.
-
 zug(Farbe,Zugfolge,Zuglänge) :-
+	Zuglänge > 4,
 	ZL is Zuglänge-4,
 	ZL2 is Zuglänge-2,
 	sub_atom(Zugfolge,ZL,2,_,FeldA),
@@ -41,7 +41,6 @@ zug(Farbe,Zugfolge,Zuglänge) :-
 	selbst(Farbe,FeldA,Kopf),
 	testJump(Farbe,Kopf,FeldA,FeldZ,M), jump(FeldA,M,FeldZ),
 	!.
-
 demo :-
 	schreibeBrett(schwarz),write(e3d4),nl,
 	selbst(schwarz,e3,KopfS1),
@@ -90,10 +89,18 @@ testMove(weiss,Kopf,FeldA,FeldZ) :-
 	brett(FeldZ,[]).
 
 move(FeldA,FeldZ) :-
-	retract(brett(FeldA,Stapel)),
-	assertz(brett(FeldA,[])),
-	retract(brett(FeldZ,[])),
-	asserta(brett(FeldZ,Stapel)).
+	sub_atom(FeldZ,_,1,1,Zeile),
+	retract(brett(FeldA,[Kopf|Rest])),
+        assertz(brett(FeldA,[])),
+	retract(brett(FeldZ,_)),
+	(   Kopf == w,
+	    Zeile == g,
+	    asserta(brett(FeldZ,[g|Rest]))
+	;   Kopf == s,
+	    Zeile == a,
+	    asserta(brett(FeldZ,[r|Rest]))
+	;   asserta(brett(FeldZ,[Kopf|Rest]))
+	).
 
 testJump(schwarz,Kopf,FeldA,FeldZ,M) :-
 	( nachbarn(FeldZ,M,FeldA)
@@ -111,10 +118,18 @@ testJump(weiss,Kopf,FeldA,FeldZ,M) :-
 	brett(FeldZ,[]).
 
 jump(FeldA,M,FeldZ) :-
-	retract(brett(FeldA,StapelA)),
+	sub_atom(FeldZ,_,1,1,Zeile),
+	retract(brett(FeldA,[KopfA|RestA])),
 	assertz(brett(FeldA,[])),
 	retract(brett(M,[KopfM|RestM])),
 	asserta(brett(M,RestM)),
 	retract(brett(FeldZ,[])),
-	append(StapelA,[KopfM],StapelZ),
+	(   KopfA == w,
+	    Zeile == g,
+	    append([g|RestA],[KopfM],StapelZ)
+	;   KopfA == s,
+	    Zeile == a,
+	    append([r|RestA],[KopfM],StapelZ)
+	;   append([KopfA|RestA],[KopfM],StapelZ)
+	),
 	asserta(brett(FeldZ,StapelZ)).

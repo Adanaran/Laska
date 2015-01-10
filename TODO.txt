@@ -2,8 +2,9 @@
 #2 (DONE) Umstellen der Bewertung auf Liste                	: Dan
 #3 MiniMax Umsetzung mit Liste                      		: Malte
 #4 AlphaBeta Umsetzung                              		: Malte
-#5 (DONE) Doppelsprünge                                    	: Tim
-#6 (DONE) Zugoperation auf der Liste                       	: Dan
+#5 (DONE) Doppelsprünge										: Tim
+#6 (DONE) Zugoperation auf der Liste						: Dan
 #7 Offizierswerdung nach Zügen auf V-Brett:         		: Dan
 #8 Mehrfachsprünge auf V-Brett                      		: Dan
-#9 Offizierswerdung						: Tim
+#9 (DONE) Offizierswerdung									: Tim
+#10 Siegbedingungen											: Tim

@@ -1,31 +1,31 @@
 :-[laskazug].
-:-retractall(brett(_,_)).
-:-[laskazug].
+%:-retractall(brett(_,_)).
+%:-[laskazug].
 :-[virtualBoard].
 
 testbrett :-
 retractall(brett(_,_)),
-assert(brett(a1,[w])),
+assert(brett(a1,[])),
 assert(brett(a3,[])),
 assert(brett(a5,[])),
 assert(brett(a7,[])),
 assert(brett(b2,[s])),
 assert(brett(b4,[])),
-assert(brett(b6,[])),
+assert(brett(b6,[w])),
 assert(brett(c1,[])),
 assert(brett(c3,[])),
-assert(brett(c5,[])),
+assert(brett(c5,[s])),
 assert(brett(c7,[])),
-assert(brett(d2,[s])),  % diese drei Felder
+assert(brett(d2,[])),  % diese drei Felder
 assert(brett(d4,[])), % (12, 13 und 14)
 assert(brett(d6,[])), % sind anfangs (normalerweise) unbesetzt
 assert(brett(e1,[])),
 assert(brett(e3,[])),
-assert(brett(e5,[])),
+assert(brett(e5,[w])),
 assert(brett(e7,[])),
-assert(brett(f2,[])),
+assert(brett(f2,[w])),
 assert(brett(f4,[])),
-assert(brett(f6,[])),
+assert(brett(f6,[s])),
 assert(brett(g1,[])),
 assert(brett(g3,[])),
 assert(brett(g5,[])),
@@ -34,10 +34,10 @@ assert(brett(g7,[])).
 %	müssen.
 %	Und das ganz bequem einkommentierbar :D
 %
-%	Aktuell: Test von Mehrfachsprüngen mit einem Offizier über
-%	Offiziere und Gegner.
+%	Aktuell: Test von Offizierswerdung per Zug und Sprung beider
+%	Seiten.
 %
-%:-testbrett.
+:-testbrett.
 
 zieh :-
 	ziehen(schwarz,e3d4),
