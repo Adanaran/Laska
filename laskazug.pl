@@ -9,11 +9,23 @@ dialog :-
 	schreibeBrett(Farbe),
 	read(Zugfolge),
 	ziehen(Farbe,Zugfolge),
-	fail.
+	sieg(Farbe).
 farbe(F) :- fehler(ja,F).
 farbe(schwarz) :- fehler(nein,weiss).
 farbe(weiss) :- fehler(nein,schwarz).
 farbe(F) :- farbe(F).
+sieg(Farbe) :-
+	gegner(Farbe,Gegner),
+	\+selbst(Gegner,_,_),
+	schreibeBrett(Gegner),
+	nl,
+	write(Gegner),
+	write(' hat keine Steine mehr.'),
+	nl,
+	write(Farbe),
+	write(' hat gewonnen.'),
+	nl,
+	abort.
 ziehen(Farbe,Zugfolge) :-
 	atom_length(Zugfolge,L),
 	L >= 4,
