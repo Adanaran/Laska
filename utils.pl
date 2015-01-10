@@ -17,6 +17,14 @@ ermittleSprungLänge(Zug,Länge):-
 %  turmZwischen(+P,+Start,+Ziel,-Turm)
 %   Gibt in Turm den Turm zwischen Start und Ziel zurück.
 turmZwischen([_|Brett],Start,Ziel,Turm):-
+	feldZwischen(Start,Ziel,Zwischen),
+	turmAufFeld(Brett,Zwischen,Turm).
+
+% ------------------------------------------------------------------------
+%  feldZwischen(+Start,+Ziel,-FeldZwischen).
+%   Gibt das Feld zwischen Start und Ziel zurück.
+
+feldZwischen(Start,Ziel,FeldZwischen):-
 	sub_atom(Start,0,1,_,BStart),
 	sub_atom(Start,1,1,_,AStart),
 	sub_atom(Ziel,0,1,_,BZiel),
@@ -25,8 +33,8 @@ turmZwischen([_|Brett],Start,Ziel,Turm):-
 	atom_number(AStart, ZStart),
 	atom_number(AZiel, ZZiel),
 	ZZwischen is (ZStart + ZZiel)/2,
-	atomic_concat(BZwischen,ZZwischen,Zwischen),
-	turmAufFeld(Brett,Zwischen,Turm).
+	atomic_concat(BZwischen,ZZwischen,FeldZwischen),
+	true.
 
 % ------------------------------------------------------------------------
 %  buchstabeZwischen(+ersterBuchstabe,+zweiterBuchstabe,-BuchstabeZwische

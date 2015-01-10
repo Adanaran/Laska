@@ -1,6 +1,8 @@
-#1 Mapping-Datei von Index der Liste auf Feld-Atome : Tim
+#1 (DONE) Mapping-Datei von Index der Liste auf Feld-Atome : Tim
 #2 (DONE) Umstellen der Bewertung auf Liste                : Dan
 #3 MiniMax Umsetzung mit Liste                      : Malte
 #4 AlphaBeta Umsetzung                              : Malte
 #5 Doppelsprünge                                    : Tim
-#6 Zugoperation auf der Liste                       : Dan
+#6 (DONE) Zugoperation auf der Liste                       : Dan
+#7 Offizierswerdung nach Zügen auf V-Brett:         : Dan
+#8 Mehrfachsprünge auf V-Brett                      : Dan

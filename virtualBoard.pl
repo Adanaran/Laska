@@ -93,6 +93,7 @@ virtualisiereBrett([Farbe|P]) :-
 
 % ------------------------------------------------------------------------
 %  virtuellZiehen(+P,+Zugfolge,-PRes).
+%   Zieht eine Zugfolge auf P und bindet das Ergebnis an PRes.
 
 virtuellZiehen([Farbe|Brett],Zugfolge,PRes):-
 	atom_length(Zugfolge,L),
@@ -106,8 +107,11 @@ virtuellZiehen(_,_,_):-
 	true.
 
 % ------------------------------------------------------------------------
-%  viertuellZug(+Brett,+Farbe,+Zugfolge,+L‰nge,-Ergebnis)
+%  virtuellZug(+Brett,+Farbe,+Zugfolge,+L‰nge,-Ergebnis)
+%   F¸hrt die Zugfolge von Farbe auf Brett mit der L‰nge aus und gibt
+%   das resultierende virtuelle Brett zur¸ck.
 
+%Z‹GE
 virtuellZug(Brett,schwarz,Zugfolge,4,PRes):-
 	istZug(Zugfolge),
 	sub_atom(Zugfolge,0,2,_,FeldA),
@@ -125,8 +129,8 @@ virtuellZug(Brett,schwarz,Zugfolge,4,PRes):-
 	nth1(IndexA,P2,[],PRest),
 
 	nth1(IndexZ,P2,_,PRest2),
-	nth1(IndexZ,PRes,Turm,PRest2),
-	true.
+	nth1(IndexZ,[_|BrettRes],Turm,PRest2),
+	append([weiss],BrettRes,PRes).
 
 virtuellZug(Brett,weiss,Zugfolge,4,PRes):-
 	istZug(Zugfolge),
@@ -145,6 +149,69 @@ virtuellZug(Brett,weiss,Zugfolge,4,PRes):-
 	nth1(IndexA,P2,[],PRest),
 
 	nth1(IndexZ,P2,_,PRest2),
-	nth1(IndexZ,PRes,Turm,PRest2),
-	true.
+	nth1(IndexZ,[_|BrettRes],Turm,PRest2),
+	append([schwarz],BrettRes,PRes).
+
+%SPR‹NGE_EINFACH
+virtuellZug(Brett,schwarz,Zugfolge,4,PRes):-
+	sub_atom(Zugfolge,0,2,_,FeldA),
+	sub_atom(Zugfolge,2,2,_,FeldZ),
+	FeldA \== FeldZ,
+	turmAufFeld(Brett,FeldZ,[]),
+	(
+	    turmAufFeld(Brett,FeldA,[s|_]);
+	    turmAufFeld(Brett,FeldA,[r|_])
+	),
+	append([schwarz],Brett,P),
+	(
+	    turmZwischen(P,FeldA,FeldZ,[w|_]);
+	    turmZwischen(P,FeldA,FeldZ,[g|_])
+	),
+	feld(FeldA,IndexA),
+	feld(FeldZ,IndexZ),
+	feldZwischen(FeldA,FeldZ,Feld‹),
+	feld(Feld‹,Index‹),
+
+	nth1(IndexA,Brett,TurmZiehend,BrettRest),
+	nth1(IndexA,Brett2,[],BrettRest),
+
+	nth1(Index‹,Brett2,[KopfGeschlagen|RestGeschlagen],BrettRest2),
+	append(TurmZiehend,[KopfGeschlagen],TurmZiehendMitKopf),
+	nth1(Index‹,Brett3,RestGeschlagen,BrettRest2),
+
+	nth1(IndexZ,Brett3,_,BrettRest3),
+	nth1(IndexZ,BrettRes,TurmZiehendMitKopf,BrettRest3),
+	append([weiss],BrettRes,PRes).
+
+virtuellZug(Brett,weiss,Zugfolge,4,PRes):-
+	sub_atom(Zugfolge,0,2,_,FeldA),
+	sub_atom(Zugfolge,2,2,_,FeldZ),
+	FeldA \== FeldZ,
+	turmAufFeld(Brett,FeldZ,[]),
+	(
+	    turmAufFeld(Brett,FeldA,[w|_]);
+	    turmAufFeld(Brett,FeldA,[g|_])
+	),
+	append([weiss],Brett,P),
+	(
+	    turmZwischen(P,FeldA,FeldZ,[s|_]);
+	    turmZwischen(P,FeldA,FeldZ,[r|_])
+	),
+	feld(FeldA,IndexA),
+	feld(FeldZ,IndexZ),
+	feldZwischen(FeldA,FeldZ,Feld‹),
+	feld(Feld‹,Index‹),
+
+	nth1(IndexA,Brett,TurmZiehend,BrettRest),
+	nth1(IndexA,Brett2,[],BrettRest),
+
+	nth1(Index‹,Brett2,[KopfGeschlagen|RestGeschlagen],BrettRest2),
+	append(TurmZiehend,[KopfGeschlagen],TurmZiehendMitKopf),
+	nth1(Index‹,Brett3,RestGeschlagen,BrettRest2),
+
+	nth1(IndexZ,Brett3,_,BrettRest3),
+	nth1(IndexZ,BrettRes,TurmZiehendMitKopf,BrettRest3),
+	append([schwarz],BrettRes,PRes).
+
+
 
