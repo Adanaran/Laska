@@ -1,4 +1,6 @@
 :-[laskazug].
+:-[utils].
+
 feld(a1,1).
 feld(a3,2).
 feld(a5,3).
@@ -91,6 +93,7 @@ virtualisiereBrett([Farbe|P]) :-
 
 % ------------------------------------------------------------------------
 %  virtuellZiehen(+P,+Zugfolge,-PRes).
+
 virtuellZiehen([Farbe|Brett],Zugfolge,PRes):-
 	atom_length(Zugfolge,L),
 	L >= 4,
@@ -104,7 +107,9 @@ virtuellZiehen(_,_,_):-
 
 % ------------------------------------------------------------------------
 %  viertuellZug(+Brett,+Farbe,+Zugfolge,+Länge,-Ergebnis)
+
 virtuellZug(Brett,schwarz,Zugfolge,4,PRes):-
+	istZug(Zugfolge),
 	sub_atom(Zugfolge,0,2,_,FeldA),
 	sub_atom(Zugfolge,2,2,_,FeldZ),
 	FeldA \== FeldZ,
@@ -124,6 +129,7 @@ virtuellZug(Brett,schwarz,Zugfolge,4,PRes):-
 	true.
 
 virtuellZug(Brett,weiss,Zugfolge,4,PRes):-
+	istZug(Zugfolge),
 	sub_atom(Zugfolge,0,2,_,FeldA),
 	sub_atom(Zugfolge,2,2,_,FeldZ),
 	FeldA \== FeldZ,
