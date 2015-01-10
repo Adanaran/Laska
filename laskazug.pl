@@ -30,6 +30,18 @@ zug(Farbe,Zugfolge,4) :-
 	( testMove(Farbe,Kopf,FeldA,FeldZ), move(FeldA,FeldZ)
 	; testJump(Farbe,Kopf,FeldA,FeldZ,M), jump(FeldA,M,FeldZ)
 	), !.
+
+zug(Farbe,Zugfolge,Zuglänge) :-
+	ZL is Zuglänge-4,
+	ZL2 is Zuglänge-2,
+	sub_atom(Zugfolge,ZL,2,_,FeldA),
+	sub_atom(Zugfolge,ZL2,2,_,FeldZ),
+	zug(Farbe,Zugfolge,ZL2),
+	FeldA \== FeldZ,
+	selbst(Farbe,FeldA,Kopf),
+	testJump(Farbe,Kopf,FeldA,FeldZ,M), jump(FeldA,M,FeldZ),
+	!.
+
 demo :-
 	schreibeBrett(schwarz),write(e3d4),nl,
 	selbst(schwarz,e3,KopfS1),
