@@ -272,7 +272,7 @@ ermittleFolgesprung([Farbe|Brett],StartFeld,ZielFelder,FeldListe) :-
 	atom_concat(ZielFelder,LFeld,ZFeld),
 	append(FeldListe,[OFeld],ListeNeu),
 	assert(sprungmöglichkeit(StartFeld,ZFeld)),
-	folgesprünge(Farbe, StartFeld, ZFeld, ListeNeu).
+	ermittleFolgesprung(Farbe, StartFeld, ZFeld, ListeNeu).
 ermittleFolgesprung(_,_,_,_).
 
 %% -----------------------------------------------------------------------
@@ -300,7 +300,7 @@ ermittleEchtFolgesprung(Farbe,StartFeld,ZielFelder,FeldListe) :-
 	atom_concat(ZielFelder,LFeld,ZFeld),
 	append(FeldListe,[OFeld],ListeNeu),
 	assert(sprungmöglichkeit(StartFeld,ZFeld)),
-	folgesprünge(Farbe, StartFeld, ZFeld, ListeNeu).
+	ermittleEchtFolgesprung(Farbe, StartFeld, ZFeld, ListeNeu).
 ermittleEchtFolgesprung(_,_,_,_).
 
 %% ------------------------------------------------------------------------
