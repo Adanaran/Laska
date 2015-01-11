@@ -39,6 +39,12 @@ assert(brett(g7,[])).
 %
 :-testbrett.
 
+%%---------------------------------------------------------------------
+% Zieht automatisch und ohne Beachtung der Regeln einige Züge.
+%
+% Vorraussetzung für den Aufruf ist die Ausgangsstellung auf dem
+% Spielbrett stehen zu haben.
+%%
 zieh :-
 	ziehen(schwarz,e3d4),
 	ziehen(weiss,c5e3),
@@ -52,21 +58,31 @@ zieh :-
 :- dynamic
 	sprungmöglichkeit/2.
 
+%% --------------------------------------------------------------------
+% züge(+P,-Zugliste).
+%
+% Ermittelt auf Grundlage eines virtuellen Brettes alle möglichen
+% erlaubten Züge des entsprechenden Spielers. Die Liste der Züge wird in
+% Zugliste zurückgeschrieben.
+%
+% Sprungermittlung
 züge(P,_) :-
 	retractall(sprungmöglichkeit(_,_)),
 	write('Mögliche Züge: '),
 	nl,
-	sprünge(P,FFeld, SFeld,Übersprungen),
-	folgesprünge(P,FFeld,SFeld,[Übersprungen]),
+	ermittleSprung(P,FFeld, SFeld,Übersprungen),
+	ermittleFolgesprung(P,FFeld,SFeld,[Übersprungen]),
 	filterSprünge(SFeld),
 	fail.
 
+% Zugermittlung
 züge(P,_) :-
 	retractall(zugmöglichkeit(_,_)),
 	\+sprungmöglichkeit(_,_),
 	ermittleZug(P),
 	fail.
 
+% Auflistung der Ergebnisprädikate (und Ausgabe)
 züge(_,Liste) :-
 	listeSprünge([],Liste),
 	\+Liste == [],
@@ -74,93 +90,80 @@ züge(_,Liste) :-
 	listeZüge([],Liste),
 	write(Liste),!.
 
+%% --------------------------------------------------------------------
+% echtZüge(+Farbe,-Zugliste).
+%
+% Ermittelt auf Grundlage des aktuellen Brettes alle möglichen
+% erlaubten Züge des übergebenen Spielers. Die Liste der Züge wird in
+% Zugliste zurückgeschrieben.
+%
+% Wird von laskazug.pl verwendet um Sieg durch Zugmangel zu ermitteln
+% und das Zugmenü zu befüllen.
+%
+%%
+
+% Sprungermittlung
 echtZüge(Farbe,_):-
 	retractall(sprungmöglichkeit(_,_)),
-	echtSprünge(Farbe,FFeld, SFeld,Übersprungen),
-	echtFolgesprünge(Farbe,FFeld,SFeld,[Übersprungen]),
+	ermittleEchtSprung(Farbe,FFeld, SFeld,Übersprungen),
+	ermittleEchtFolgesprung(Farbe,FFeld,SFeld,[Übersprungen]),
 	filterSprünge(SFeld),
 	fail.
+
+% Zugermittlung
 echtZüge(Farbe,_):-
 	retractall(zugmöglichkeit(_,_)),
 	\+sprungmöglichkeit(_,_),
 	ermittleEchtZug(Farbe),
 	fail.
 
+% Auflistung der Ergebnisprädikate
 echtZüge(_,Liste):-
 	listeSprünge([],Liste),
 	\+Liste == [],!;
 	listeZüge([],Liste),
 	!.
 
+%% -----------------------------------------------------------------------
+% listeSprünge(+ListeVorhanden, -ListeErgebnis).
+%
+% Sammelt alle gefundenen Sprungmöglichkeiten in einer Liste und gibt
+% diese zurück.
+%
+%%
 listeSprünge(ListeVorhanden, ListeErgebnis) :-
 	sprungmöglichkeit(S,Z),
 	atom_concat(S,Z,Zug),
 	\+member(Zug,ListeVorhanden),
 	append(ListeVorhanden, [Zug], ListeNeu),
 	listeSprünge(ListeNeu,ListeErgebnis).
-
 listeSprünge(L,L).
 
+%% -----------------------------------------------------------------------
+% listeZüge(+ListeVorhanden, -ListeErgebnis).
+%
+% Sammelt alle gefundenen Zugmöglichkeiten in einer Liste und gibt
+% diese zurück.
+%
+%%
 listeZüge(ListeVorhanden, ListeErgebnis) :-
 	zugmöglichkeit(S,Z),
 	atom_concat(S,Z,Zug),
 	\+member(Zug,ListeVorhanden),
 	append(ListeVorhanden, [Zug], ListeNeu),
 	listeZüge(ListeNeu,ListeErgebnis).
-
 listeZüge(L,L).
 
-sprünge([Farbe|Brett], FFeld, LFeld, OFeld) :-
-	selbst(Farbe,FFeld,Head),               %Ermittle die aktuell belegten Felder der Farbe und deren oberste Steine
-	sprungnachbarn(Head,LFeld,OFeld,FFeld), %Ermittle mögliche Sprünge über Gegner auf Leerfelder
-	turmAufFeld(Brett, LFeld,[]),                        %Prüfe ob das Sprungziel leer ist
-	opponent(Opp,Head),                     %Ermittle die Art der obersten Steine des Gegners
-	turmAufFeld(Brett, OFeld,[Opp|_]),			%Prüfe ob der zu überspringende Stein ein gegnerischer ist
-	assert(sprungmöglichkeit(FFeld,LFeld)). %Merke die Sprungmöglichkeit
-
-filterSprünge(SFeld) :-
-	sprungmöglichkeit(UrsprungsFeld, Ziel),
-	\+ Ziel == SFeld,
-	filterSprung(UrsprungsFeld, Ziel, SFeld).
-
-filterSprung(U, Z1, Z2):-
-	 sub_atom(Z1,_,_,_,Z2),
-	 retractall(sprungmöglichkeit(U, Z2)),
-	 filterSprünge(Z1),
-	 fail.
-
-folgesprünge([Farbe|Brett],StartFeld,ZielFelder,FeldListe) :-
-	selbst(Farbe,StartFeld,Head),
-	sub_atom(ZielFelder,_,2,0,ZielFeld),
-	sprungnachbarn(Head,LFeld,OFeld,ZielFeld),
-	(
-	    turmAufFeld(Brett,LFeld,[]);
-	    LFeld == StartFeld
-	),
-	opponent(Opp,Head),
-	turmAufFeld(Brett, OFeld,[Opp|_]),
-	\+member(OFeld, FeldListe),
-	atom_concat(ZielFelder,LFeld,ZFeld),
-	append(FeldListe,[OFeld],ListeNeu),
-	assert(sprungmöglichkeit(StartFeld,ZFeld)),
-	folgesprünge(Farbe, StartFeld, ZFeld, ListeNeu).
-
-folgesprünge(_,_,_,_).
-
-%%	Definiert einen möglichen Sprung vom UrsprungsFeld über das
-%	MittelFeld zum Zielfeld in Abhängigkeit der (Kopfstein-)Farbe,
-%	um Rückwärtssprünge einzuschränken.
-sprungnachbarn(Head, ZielFeld, MittelFeld, UrsprungsFeld) :-
-	((
-	    \+Head == w,
-	    nachbarn(ZielFeld,MittelFeld,UrsprungsFeld)
-	  )
-	 ;
-	  (
-	    \+Head == s,
-	    nachbarn(UrsprungsFeld,MittelFeld,ZielFeld)
-	)).
-
+%% -----------------------------------------------------------------------
+% ermittleZug(+VirtuellesBrett).
+%
+% Ermittelt ausgehen von aktuell belegten SpielerFeldern alle möglichen
+% Züge.
+%
+% Gefundene Züge werden als Prädikat
+% zugmöglichkeit(spielerFeld,zielFeld) gespeichert.
+%
+%%
 ermittleZug([Farbe|Brett]) :-
 	selbst(Farbe,FFeld,Head),
 	(
@@ -179,7 +182,15 @@ ermittleZug([Farbe|Brett]) :-
 	),
 	assert(zugmöglichkeit(FFeld,LFeld)).
 
-
+%% -----------------------------------------------------------------------
+% ermittleEchtZug(+Farbe).
+%
+% Ermittelt ausgehen vom aktuellen Brett und der übergebenen
+% Spielerfarbe alle möglichen Züge.
+%
+% Gefundene Züge werden als Prädikat
+% zugmöglichkeit(spielerFeld,zielFeld) gespeichert.
+%
 ermittleEchtZug(Farbe) :-
 	selbst(Farbe,FFeld,Head),
 	(
@@ -198,7 +209,36 @@ ermittleEchtZug(Farbe) :-
 	),
 	assert(zugmöglichkeit(FFeld,LFeld)).
 
-echtSprünge(Farbe, FFeld, LFeld, OFeld) :-
+%% -----------------------------------------------------------------------
+% ermittleSprung(+VirtuellesBrett, -SpielerFeld, -LeerFeld, -GegnerFeld).
+%
+% Ermittelt ausgehen von aktuell belegten SpielerFeldern alle möglichen
+% Sprünge über GegnerFelder auf LeerFelder.
+%
+% Gefundene Sprungmöglichkeiten werden als Prädikat
+% sprungmöglichkeit(spielerFeld,zielFeld) gespeichert.
+%
+%%
+ermittleSprung([Farbe|Brett], FFeld, LFeld, OFeld) :-
+	selbst(Farbe,FFeld,Head),
+	sprungnachbarn(Head,LFeld,OFeld,FFeld),
+	opponent(Opp,Head),
+	turmAufFeld(Brett, OFeld,[Opp|_]),
+	turmAufFeld(Brett, LFeld,[]),
+	assert(sprungmöglichkeit(FFeld,LFeld)).
+
+%% -----------------------------------------------------------------------
+% ermittleEchtSprung(+Farbe, -SpielerFeld, -LeerFeld, -GegnerFeld).
+%
+% Ermittelt ausgehen vom aktuellen Brett und der übergebenen
+% Spielerfarbe alle möglichen Sprünge über
+% GegnerFelder auf LeerFelder.
+%
+% Gefundene Sprungmöglichkeiten werden als Prädikat
+% sprungmöglichkeit(spielerFeld,zielFeld) gespeichert.
+%
+%%
+ermittleEchtSprung(Farbe, FFeld, LFeld, OFeld) :-
 	selbst(Farbe,FFeld,Head),               %Ermittle die aktuell belegten Felder der Farbe und deren oberste Steine
 	sprungnachbarn(Head,LFeld,OFeld,FFeld), %Ermittle mögliche Sprünge über Gegner auf Leerfelder
 	brett(LFeld,[]),                        %Prüfe ob das Sprungziel leer ist
@@ -206,7 +246,47 @@ echtSprünge(Farbe, FFeld, LFeld, OFeld) :-
 	brett(OFeld,[Opp|_]),			%Prüfe ob der zu überspringende Stein ein gegnerischer ist
 	assert(sprungmöglichkeit(FFeld,LFeld)). %Merke die Sprungmöglichkeit
 
-echtFolgesprünge(Farbe,StartFeld,ZielFelder,FeldListe) :-
+%% -----------------------------------------------------------------------
+% ermittleFolgesprung(+VirtuellesBrett, +StartFeld, +ZielFelder,
+% +FeldListe).
+%
+% Ermittelt alle möglichen Folgesprünge über GegnerFelder auf
+% LeerFelder auf Basis des übergebenen virtuellen Brettes.
+%
+% Neue Gefundene Sprungmöglichkeiten werden als Prädikat
+% sprungmöglichkeit(spielerFeld,zielFelder) gespeichert, wobei
+% zielFelder auch alle Zwischenfelder enthält.
+%
+%%
+ermittleFolgesprung([Farbe|Brett],StartFeld,ZielFelder,FeldListe) :-
+	selbst(Farbe,StartFeld,Head),
+	sub_atom(ZielFelder,_,2,0,ZielFeld),
+	sprungnachbarn(Head,LFeld,OFeld,ZielFeld),
+	(
+	    turmAufFeld(Brett,LFeld,[]);
+	    LFeld == StartFeld
+	),
+	opponent(Opp,Head),
+	turmAufFeld(Brett, OFeld,[Opp|_]),
+	\+member(OFeld, FeldListe),
+	atom_concat(ZielFelder,LFeld,ZFeld),
+	append(FeldListe,[OFeld],ListeNeu),
+	assert(sprungmöglichkeit(StartFeld,ZFeld)),
+	folgesprünge(Farbe, StartFeld, ZFeld, ListeNeu).
+ermittleFolgesprung(_,_,_,_).
+
+%% -----------------------------------------------------------------------
+% ermittleEchtFolgeSprung(+Farbe, +StartFeld, +ZielFelder, +FeldListe).
+%
+% Ermittelt alle möglichen Folgesprünge über GegnerFelder auf
+% LeerFelder auf Basis des aktuellen Brettes.
+%
+% Neue Gefundene Sprungmöglichkeiten werden als Prädikat
+% sprungmöglichkeit(spielerFeld,zielFelder) gespeichert, wobei
+% zielFelder auch alle Zwischenfelder enthält.
+%
+%%
+ermittleEchtFolgesprung(Farbe,StartFeld,ZielFelder,FeldListe) :-
 	selbst(Farbe,StartFeld,Head),
 	sub_atom(ZielFelder,_,2,0,ZielFeld),
 	sprungnachbarn(Head,LFeld,OFeld,ZielFeld),
@@ -221,5 +301,40 @@ echtFolgesprünge(Farbe,StartFeld,ZielFelder,FeldListe) :-
 	append(FeldListe,[OFeld],ListeNeu),
 	assert(sprungmöglichkeit(StartFeld,ZFeld)),
 	folgesprünge(Farbe, StartFeld, ZFeld, ListeNeu).
+ermittleEchtFolgesprung(_,_,_,_).
 
-echtFolgesprünge(_,_,_,_).
+%% ------------------------------------------------------------------------
+% sprungnachbarn(+Head, +ZielFeld, +MittelFeld, +UrsprungsFeld) :-
+%
+% Definiert einen möglichen Sprung vom UrsprungsFeld über das MittelFeld
+% zum Zielfeld in Abhängigkeit der (Kopfstein-)Farbe, um Rückwärtssprünge einzuschränken.
+%
+%%
+sprungnachbarn(Head, ZielFeld, MittelFeld, UrsprungsFeld) :-
+	((
+	    \+Head == w,
+	    nachbarn(ZielFeld,MittelFeld,UrsprungsFeld)
+	  )
+	 ;
+	  (
+	    \+Head == s,
+	    nachbarn(UrsprungsFeld,MittelFeld,ZielFeld)
+	)).
+
+%% -----------------------------------------------------------------------
+% filterSprünge(+SFeld,).
+%
+% Filtert die gefundenen Sprungmöglichkeiten, damit bei Mehrfachsprüngen
+% immer bis zum Ende gesprungen wird, indem Sprünge, die auf
+% Zwischenzielen enden entfernt werden.
+%
+%%
+filterSprünge(SFeld) :-
+	sprungmöglichkeit(UrsprungsFeld, Ziel),
+	\+ Ziel == SFeld,
+	filterSprünge(UrsprungsFeld, Ziel, SFeld).
+filterSprünge(U, Z1, Z2):-
+	 sub_atom(Z1,_,_,_,Z2),
+	 retractall(sprungmöglichkeit(U, Z2)),
+	 filterSprünge(Z1),
+	 fail.
