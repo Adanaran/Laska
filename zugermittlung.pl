@@ -1,4 +1,4 @@
-:-[laskazug].
+%:-[laskazug].
 %:-retractall(brett(_,_)).
 %:-[laskazug].
 :-[virtualBoard].
@@ -74,6 +74,24 @@ züge(_,Liste) :-
 	listeZüge([],Liste),
 	write(Liste),!.
 
+echtZüge(Farbe,_):-
+	retractall(sprungmöglichkeit(_,_)),
+	echtSprünge(Farbe,FFeld, SFeld,Übersprungen),
+	echtFolgesprünge(Farbe,FFeld,SFeld,[Übersprungen]),
+	filterSprünge(SFeld),
+	fail.
+echtZüge(Farbe,_):-
+	retractall(zugmöglichkeit(_,_)),
+	\+sprungmöglichkeit(_,_),
+	ermittleEchtZug(Farbe),
+	fail.
+
+echtZüge(_,Liste):-
+	listeSprünge([],Liste),
+	\+Liste == [],!;
+	listeZüge([],Liste),
+	!.
+
 listeSprünge(ListeVorhanden, ListeErgebnis) :-
 	sprungmöglichkeit(S,Z),
 	atom_concat(S,Z,Zug),
@@ -144,18 +162,64 @@ sprungnachbarn(Head, ZielFeld, MittelFeld, UrsprungsFeld) :-
 	)).
 
 ermittleZug([Farbe|Brett]) :-
-	turmAufFeld(Brett,LFeld,[]),
 	selbst(Farbe,FFeld,Head),
 	(
 	    (
 	    \+Head == w,
-	    nachbarn(LFeld,FFeld,_)
+	    nachbarn(LFeld,FFeld,_),
+	    turmAufFeld(Brett,LFeld,[])
 	)
 	    ;
 	    (
 	    \+Head == s,
-	    nachbarn(FFeld,LFeld,_)
+	    nachbarn(FFeld,LFeld,_),
+	    turmAufFeld(Brett,LFeld,[])
 	    )
 
 	),
 	assert(zugmöglichkeit(FFeld,LFeld)).
+
+
+ermittleEchtZug(Farbe) :-
+	selbst(Farbe,FFeld,Head),
+	(
+	    (
+	    \+Head == w,
+	    nachbarn(LFeld,FFeld,_),
+	    brett(LFeld,[])
+	)
+	    ;
+	    (
+	    \+Head == s,
+	    nachbarn(FFeld,LFeld,_),
+	    brett(LFeld,[])
+	    )
+
+	),
+	assert(zugmöglichkeit(FFeld,LFeld)).
+
+echtSprünge(Farbe, FFeld, LFeld, OFeld) :-
+	selbst(Farbe,FFeld,Head),               %Ermittle die aktuell belegten Felder der Farbe und deren oberste Steine
+	sprungnachbarn(Head,LFeld,OFeld,FFeld), %Ermittle mögliche Sprünge über Gegner auf Leerfelder
+	brett(LFeld,[]),                        %Prüfe ob das Sprungziel leer ist
+	opponent(Opp,Head),                     %Ermittle die Art der obersten Steine des Gegners
+	brett(OFeld,[Opp|_]),			%Prüfe ob der zu überspringende Stein ein gegnerischer ist
+	assert(sprungmöglichkeit(FFeld,LFeld)). %Merke die Sprungmöglichkeit
+
+echtFolgesprünge(Farbe,StartFeld,ZielFelder,FeldListe) :-
+	selbst(Farbe,StartFeld,Head),
+	sub_atom(ZielFelder,_,2,0,ZielFeld),
+	sprungnachbarn(Head,LFeld,OFeld,ZielFeld),
+	(
+	    brett(LFeld,[]);
+	    LFeld == StartFeld
+	),
+	opponent(Opp,Head),
+	brett(OFeld,[Opp|_]),
+	\+member(OFeld, FeldListe),
+	atom_concat(ZielFelder,LFeld,ZFeld),
+	append(FeldListe,[OFeld],ListeNeu),
+	assert(sprungmöglichkeit(StartFeld,ZFeld)),
+	folgesprünge(Farbe, StartFeld, ZFeld, ListeNeu).
+
+echtFolgesprünge(_,_,_,_).

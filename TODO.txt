@@ -7,4 +7,5 @@
 #7 Offizierswerdung nach Zügen auf V-Brett:         		: Dan
 #8 Mehrfachsprünge auf V-Brett                      		: Dan
 #9 (DONE) Offizierswerdung									: Tim
-#10 Siegbedingungen											: Tim
+#10(DONE) Siegbedingungen									: Tim
+#11(DONE) Schickeres Spielfeld und Zugauswahl per Menü		: Tim

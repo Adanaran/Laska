@@ -1,31 +1,61 @@
 :- dynamic
 	fehler/2.
+:- retractall(fehler(_,_)). %Entfernt Reste vorheriger Spiele aus dem Speicher
 fehler(nein,weiss).	% Schwarz beginnt das Spiel, s.u.!!
 
-:- ['board.pl'].
+:- ['boardimproved.pl'].
 
 dialog :-
 	farbe(Farbe),
 	schreibeBrett(Farbe),
-	read(Zugfolge),
-	ziehen(Farbe,Zugfolge),
-	sieg(Farbe).
+	echtZüge(Farbe,Züge),
+	\+sieg(Farbe,Züge,' kann nicht mehr ziehen.'),
+	zugAuswahl(Farbe,Züge),
+	fail.
+
+
+zugAuswahl(Farbe,Zugliste) :-
+	nl,
+	writeZugliste(Zugliste,1),
+	read(Menüauswahl),
+	integer(Menüauswahl),
+	(
+	    nth1(Menüauswahl,Zugliste,Zugfolge),
+	    ziehen(Farbe,Zugfolge)
+	    ;
+	    Menüauswahl == 0,
+	    sieg(Farbe,[],' hat aufgegeben')
+	).
+
+writeZugliste(_,1):-
+	write('0'), write(' - Aufgeben'), nl, fail.
+
+writeZugliste([],Index):-
+	write('>='), write(Index), write(' - Spieler wechseln'),nl.
+
+writeZugliste([Head|Tail],Index):-
+	write(Index), write(' - '), write(Head),nl,
+	Index2 is Index + 1,
+	writeZugliste(Tail,Index2).
+
+
 farbe(F) :- fehler(ja,F).
 farbe(schwarz) :- fehler(nein,weiss).
 farbe(weiss) :- fehler(nein,schwarz).
 farbe(F) :- farbe(F).
-sieg(Farbe) :-
+
+sieg(Farbe,Züge, Meldung) :-
 	gegner(Farbe,Gegner),
-	\+selbst(Gegner,_,_),
-	schreibeBrett(Gegner),
-	nl,
-	write(Gegner),
-	write(' hat keine Steine mehr.'),
+	Züge == [],
 	nl,
 	write(Farbe),
+	write(Meldung),
+	nl,
+	write(Gegner),
 	write(' hat gewonnen.'),
 	nl,
 	abort.
+
 ziehen(Farbe,Zugfolge) :-
 	atom_length(Zugfolge,L),
 	L >= 4,
