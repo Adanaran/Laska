@@ -46,11 +46,13 @@ assert(brett(g7,[])).
 % Spielbrett stehen zu haben.
 %%
 zieh :-
-	ziehen(schwarz,e3d4),
-	ziehen(weiss,c5e3),
-	ziehen(weiss, b6c5),
-	ziehen(weiss, c1d2),
-	ziehen(weiss, b2c1),
+	ziehen(schwarz,e3d4),ziehen(weiss,c5e3),
+	ziehen(schwarz,f2d4),ziehen(weiss,b6c5),
+	ziehen(schwarz,d4b6),ziehen(weiss,a7c5),
+	ziehen(schwarz,e1d2),ziehen(weiss,c3e1),
+	ziehen(schwarz,e3d2),ziehen(weiss,c1e3),
+	ziehen(schwarz,f4d2),ziehen(weiss,b2c1),
+	ziehen(schwarz,d2c3),
 	schreibeBrett(schwarz),!.
 
 :- dynamic
