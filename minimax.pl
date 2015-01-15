@@ -1,3 +1,8 @@
+:- dynamic
+	count/1.
+
+count(0).
+
 min_am_zug(weiss).
 
 max_am_zug(schwarz).
@@ -7,18 +12,38 @@ max_am_zug(schwarz).
 minimax(P,B,V) :-
 % L = Liste der unmittelbaren Nachfolger von P
 %     (aus legalen Zuegen)
+
+	count(C),
+	config(max_tiefe_ki,M),
+	C < M,
+	retractall(count(_)),
+	C1 is C + 1,
+	assert(count(C1)),
+
 	listeVBretter(P,L),
 	nl,nl,nl,
 	write('L ist'),nl,writeListOfList(L),
 	nl,nl,nl,
 	!,
+
 % Besten Nachfolger ermitteln
-	best(L,B,V);
-% P ist Blattknoten mit statischer Bewertung V
-	bewerte(P,V),
+	best(L,B,V),
+
+	nth0(26,B,Z),
 	nl,nl,nl,
-	write("V:"),nl,write(V),
-	write("B:"),nl,write(B),
+	write('V:'),write(V),nl,
+	write('B:'),write(B),nl,
+	write('Zug:'),write(Z),nl,
+	nl,nl,nl;
+
+% P ist Blattknoten mit statischer Bewertung V
+	siegWertung(P,V),
+
+	nth0(26,B,Z),
+	nl,nl,nl,
+	write('V:'),write(V),nl,
+	write('B:'),write(B),nl,
+	write('Zug:'),write(Z),nl,
 	nl,nl,nl.
 
 best([P],P,V) :-
