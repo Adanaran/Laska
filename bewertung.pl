@@ -1,8 +1,8 @@
-:-[board].
-:-[config].
-:-[zugermittlung].
-:-[virtualBoard].
-:-[utils].
+%:-[board].
+%:-[config].
+%:-[zugermittlung].
+%:-[virtualBoard].
+%:-[utils].
 
 %----------------------------------------------------------------
 % addiereSteinWert(+P,+Feld,+Summand,-Summe).

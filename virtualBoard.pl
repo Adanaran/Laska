@@ -1,5 +1,5 @@
-:-[laskazug].
-:-[utils].
+%:-[laskazug].
+%:-[utils].
 
 feld(a1,1).
 feld(a3,2).
@@ -89,7 +89,7 @@ virtualisiereBrett([Farbe|P]) :-
 	brett(g5,Turm23),
 	append(P24,[Turm23],P25),
 	brett(g7,Turm24),
-	append(P25,[Turm24],P).
+	append(P25,[Turm24],P),!.
 
 % ------------------------------------------------------------------------
 %  virtuellZiehen(+P,+Zugfolge,-PRes).
