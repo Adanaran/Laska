@@ -1,4 +1,5 @@
 :- [config].
+:- [utils].
 :- [boardimproved].
 :- [virtualboard].
 :- [laskazug].
