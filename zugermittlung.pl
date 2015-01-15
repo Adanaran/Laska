@@ -181,7 +181,7 @@ listeZüge(L,L).
 %
 %%
 ermittleZug([Farbe|Brett]) :-
-	selbst(Farbe,FFeld,Head),
+	virtuellSelbst(Farbe,Brett,FFeld,Head),
 	(
 	    (
 	    \+Head == w,
@@ -236,7 +236,7 @@ ermittleEchtZug(Farbe) :-
 %
 %%
 ermittleSprung([Farbe|Brett], FFeld, LFeld, OFeld) :-
-	selbst(Farbe,FFeld,Head),
+	virtuellSelbst(Farbe,Brett,FFeld,Head),
 	sprungnachbarn(Head,LFeld,OFeld,FFeld),
 	opponent(Opp,Head),
 	turmAufFeld(Brett, OFeld,[Opp|_]),

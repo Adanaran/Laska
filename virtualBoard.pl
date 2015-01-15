@@ -28,6 +28,16 @@ turmAufFeld(Brett, Koordinate, Turm) :-
 	feld(Koordinate,Index),
 	nth1(Index,Brett,Turm).
 
+virtuellSelbst(schwarz,Brett,Feld,s) :-
+	turmAufFeld(Brett,Feld,[s|_]).
+virtuellSelbst(schwarz,Brett,Feld,r) :-
+	turmAufFeld(Brett,Feld,[r|_]).
+virtuellSelbst(weiss,Brett,Feld,w) :-
+	turmAufFeld(Brett,Feld,[w|_]).
+virtuellSelbst(weiss,Brett,Feld,g) :-
+	turmAufFeld(Brett,Feld,[g|_]).
+
+
 virtualisiereBrett([Farbe|P]) :-
 	farbe(Farbe),!,
 
