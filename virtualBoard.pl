@@ -95,16 +95,51 @@ virtualisiereBrett([Farbe|P]) :-
 %  virtuellZiehen(+P,+Zugfolge,-PRes).
 %   Zieht eine Zugfolge auf P und bindet das Ergebnis an PRes.
 
-virtuellZiehen([Farbe|Brett],Zugfolge,PRes):-
+virtuellZiehen([Farbe|Brett],Zugfolge,PResOffizier):-
 	atom_length(Zugfolge,L),
 	L >= 4,
 	0 is L mod 2,
 	virtuellZug(Brett,Farbe,Zugfolge,L,PRes), !,
+	offizier(PRes,Zugfolge,L,PResOffizier),
 	true.
 
 virtuellZiehen(_,_,_):-
 	nl,write('Ungültige Eingabe!'),nl,nl,
 	true.
+
+% ------------------------------------------------------------------------
+%
+
+offizier([schwarz|Brett],Zugfolge,N,PRes):-
+	NStart is N - 2,
+	sub_atom(Zugfolge,NStart,N,_,FeldEnde),
+	feld(FeldEnde,Index),
+	nth0(Index,Brett,[w|_]),
+
+	nth1(Index,Brett,[_|TurmOhneKopf],BrettRest),
+	append([g],TurmOhneKopf,TurmMitKopf),
+	nth1(Index,BrettRes,TurmMitKopf,BrettRest),
+
+	append([schwarz],BrettRes,PRes),
+
+	true.
+
+offizier([weiss|Brett],Zugfolge,N,PRes):-
+	NStart is N - 2,
+	sub_atom(Zugfolge,NStart,N,_,FeldEnde),
+	feld(FeldEnde,Index),
+	nth0(Index,Brett,[w|_]),
+
+	nth1(Index,Brett,[_|TurmOhneKopf],BrettRest),
+	append([r],TurmOhneKopf,TurmMitKopf),
+	nth1(Index,BrettRes,TurmMitKopf,BrettRest),
+
+	append([weiss],BrettRes,PRes),
+
+	true.
+
+offizier(P,_,_,P).
+
 
 % ------------------------------------------------------------------------
 %  virtuellZug(+Brett,+Farbe,+Zugfolge,+Länge,-Ergebnis)
