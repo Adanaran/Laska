@@ -1,8 +1,3 @@
-%:-[laskazug].
-%:-retractall(brett(_,_)).
-%:-[laskazug].
-%:-[virtualBoard].
-
 testbrett :-
 retractall(brett(_,_)),
 assert(brett(a1,[])),
@@ -85,8 +80,6 @@ listeVBretter(_,[],[]).
 % Sprungermittlung
 züge(P,_) :-
 	retractall(sprungmöglichkeit(_,_)),
-	write('Mögliche Züge: '),
-	nl,
 	ermittleSprung(P,FFeld, SFeld,Übersprungen),
 	ermittleFolgesprung(P,FFeld,SFeld,[Übersprungen]),
 	filterSprünge(SFeld),
@@ -102,11 +95,8 @@ züge(P,_) :-
 % Auflistung der Ergebnisprädikate (und Ausgabe)
 züge(_,Liste) :-
 	listeSprünge([],Liste),
-	\+Liste == [],
-	write(Liste),!;
-	listeZüge([],Liste),
-	write(Liste),!.
-
+	\+Liste == [],!;
+	listeZüge([],Liste),!.
 %% --------------------------------------------------------------------
 % echtZüge(+Farbe,-Zugliste).
 %
