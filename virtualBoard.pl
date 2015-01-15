@@ -112,9 +112,10 @@ virtuellZiehen(_,_,_):-
 
 offizier([schwarz|Brett],Zugfolge,N,PRes):-
 	NStart is N - 2,
-	sub_atom(Zugfolge,NStart,N,_,FeldEnde),
+	sub_atom(Zugfolge,NStart,2,_,FeldEnde),
+	sub_atom(FeldEnde,0,1,_,g),
 	feld(FeldEnde,Index),
-	nth0(Index,Brett,[w|_]),
+	nth1(Index,Brett,[w|_]),
 
 	nth1(Index,Brett,[_|TurmOhneKopf],BrettRest),
 	append([g],TurmOhneKopf,TurmMitKopf),
@@ -126,9 +127,10 @@ offizier([schwarz|Brett],Zugfolge,N,PRes):-
 
 offizier([weiss|Brett],Zugfolge,N,PRes):-
 	NStart is N - 2,
-	sub_atom(Zugfolge,NStart,N,_,FeldEnde),
+	sub_atom(Zugfolge,NStart,2,_,FeldEnde),
+	sub_atom(FeldEnde,0,1,_,a),
 	feld(FeldEnde,Index),
-	nth0(Index,Brett,[w|_]),
+	nth1(Index,Brett,[s|_]),
 
 	nth1(Index,Brett,[_|TurmOhneKopf],BrettRest),
 	append([r],TurmOhneKopf,TurmMitKopf),
@@ -164,7 +166,7 @@ virtuellZug(Brett,schwarz,Zugfolge,4,PRes):-
 	nth1(IndexA,P2,[],PRest),
 
 	nth1(IndexZ,P2,_,PRest2),
-	nth1(IndexZ,[_|BrettRes],Turm,PRest2),
+	nth1(IndexZ,BrettRes,Turm,PRest2),
 	append([weiss],BrettRes,PRes).
 
 virtuellZug(Brett,weiss,Zugfolge,4,PRes):-
