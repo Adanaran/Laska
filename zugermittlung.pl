@@ -275,7 +275,7 @@ ermittleEchtSprung(Farbe, FFeld, LFeld, OFeld) :-
 %
 %%
 ermittleFolgesprung([Farbe|Brett],StartFeld,ZielFelder,FeldListe) :-
-	selbst(Farbe,StartFeld,Head),
+	virtuellSelbst(Farbe,Brett,StartFeld,Head),
 	sub_atom(ZielFelder,_,2,0,ZielFeld),
 	sprungnachbarn(Head,LFeld,OFeld,ZielFeld),
 	(
