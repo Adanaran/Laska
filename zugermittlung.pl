@@ -68,7 +68,8 @@ listeVBretter(P,ListeVBretter):-
 listeVBretter(P,ListeNeu,[Zug|Restzüge]) :-
 	virtuellZiehen(P,Zug,PRes),
 	listeVBretter(P,Liste,Restzüge),
-	append(Liste,[PRes],ListeNeu).
+	append(PRes,[Zug],PmitZug),
+	append(Liste,[PmitZug],ListeNeu).
 
 listeVBretter(_,[],[]).
 
