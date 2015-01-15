@@ -1,11 +1,17 @@
-#1 (DONE) Mapping-Datei von Index der Liste auf Feld-Atome 	: Tim
-#2 (DONE) Umstellen der Bewertung auf Liste                	: Dan
-#3 MiniMax Umsetzung mit Liste                      		: Malte
-#4 AlphaBeta Umsetzung                              		: Malte
-#5 (DONE) Doppelsprünge						: Tim
-#6 (DONE) Zugoperation auf der Liste				: Dan
-#7 (DONE) Offizierswerdung nach Zügen auf V-Brett:         	: Dan
-#8 (DONE) Mehrfachsprünge auf V-Brett                      	: Dan
-#9 (DONE) Offizierswerdung					: Tim
-#10(DONE) Siegbedingungen					: Tim
-#11(DONE) Schickeres Spielfeld und Zugauswahl per Menü		: Tim
+#1  (DONE) Mapping-Datei von Index der Liste auf Feld-Atome 	: Tim
+#2  (DONE) Umstellen der Bewertung auf Liste                	: Dan
+#3  (DONE) MiniMax Umsetzung mit Liste                      	: Malte
+#4  AlphaBeta Umsetzung                              		: Malte
+#5  (DONE) Doppelsprünge					: Tim
+#6  (DONE) Zugoperation auf der Liste				: Dan
+#7  (DONE) Offizierswerdung nach Zügen auf V-Brett:         	: Dan
+#8  (DONE) Mehrfachsprünge auf V-Brett                      	: Dan
+#9  (DONE) Offizierswerdung					: Tim
+#10 (DONE) Siegbedingungen					: Tim
+#11 (DONE) Schickeres Spielfeld und Zugauswahl per Menü		: Tim
+#12 Farbe KI in Config als Dynamik				: Malte
+#13 MiniMax Tiefe runterzählen + Config				: Malte
+#14 (DONE) Debug Output Züge entfernen				: Tim
+#15 MiniMax Doku						: Malte
+#16 Doku Rest							: Tim
+#17 Rumtesten							: Dan
