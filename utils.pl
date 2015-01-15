@@ -40,6 +40,7 @@ feldZwischen(Start,Ziel,FeldZwischen):-
 %  n)
 %   Gibt den Buchstaben zwischen ersterBuchstabe und zweiterBuchstabe
 %   zurück.
+
 buchstabeZwischen('a','c','b').
 buchstabeZwischen('b','d','c').
 buchstabeZwischen('c','e','d').
@@ -55,6 +56,7 @@ buchstabeZwischen('g','e','f').
 % ------------------------------------------------------------------------
 %  istZug(+Zug)
 %   Kann unifziziert werden, wenn Zug ein einfacher Zug ohne Schlag ist.
+
 istZug(Zug):-
 	sub_atom(Zug,1,1,_,A1),
 	sub_atom(Zug,3,1,_,A2),
@@ -63,4 +65,12 @@ istZug(Zug):-
 	Diff is Z1 - Z2,
 	1 is abs(Diff).
 
+% ------------------------------------------------------------------------
+%  writeListofList(+L).
+%   Schreibt eine Liste von Listen.
+
+writeListOfList([]).
+writeListOfList([H|T]):-
+	write(H),nl,
+	writeListOfList(T).
 

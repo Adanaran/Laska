@@ -9,7 +9,7 @@ minimax(P,B,V) :-
 %     (aus legalen Zuegen)
 	listeVBretter(P,L),
 	nl,nl,nl,
-	write("L:"),nl,write(L),
+	write('L ist'),nl,writeListOfList(L),
 	nl,nl,nl,
 	!,
 % Besten Nachfolger ermitteln
