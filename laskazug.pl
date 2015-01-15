@@ -15,13 +15,21 @@ dialog :-
 
 dialogKI(Farbe) :-
 	farbe(Spieler),
+	virtualisiereBrett(P),
 	schreibeBrett(Spieler),
-	(   Spieler == Farbe,
-	    zugKI;
-	echtZüge(Farbe,Züge),
-	\+sieg(Farbe,Züge,' kann nicht mehr ziehen.'),
-	zugAuswahl(Farbe,Züge)),
+	echtZüge(Spieler,Züge),
+	\+sieg(Spieler,Züge,' kann nicht mehr ziehen.'),
+	zugDurchführen(Farbe,Spieler,P,Züge),
 	fail.
+
+
+zugDurchführen(Farbe,Farbe,P,_) :-
+	    time(minimax(P,B,_,0)),
+	    nth0(26,B,Zug),
+	    ziehen(Farbe,Zug),!.
+
+zugDurchführen(_,Spieler,_,Züge):-
+	    zugAuswahl(Spieler,Züge),!.
 
 zugAuswahl(Farbe,Zugliste) :-
 	nl,
