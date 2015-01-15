@@ -63,12 +63,14 @@ zieh :-
 
 listeVBretter(P,ListeVBretter):-
 	züge(P,Zugliste),
-	listeVBretter(P,ListeVBretter,Zugliste).
+	listeVBretter(P,ListeVBretter,Zugliste),!.
 
-listeVBretter(P,Liste,[Zug|Restzüge]) :-
+listeVBretter(P,ListeNeu,[Zug|Restzüge]) :-
 	virtuellZiehen(P,Zug,PRes),
-	append(Liste,[PRes],ListeNeu),
-	listeVBretter(P,ListeNeu,Restzüge).
+	listeVBretter(P,Liste,Restzüge),
+	append(Liste,[PRes],ListeNeu).
+
+listeVBretter(_,[],[]).
 
 
 
