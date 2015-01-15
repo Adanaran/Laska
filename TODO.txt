@@ -4,7 +4,7 @@
 #4 AlphaBeta Umsetzung                              		: Malte
 #5 (DONE) Doppelsprünge						: Tim
 #6 (DONE) Zugoperation auf der Liste				: Dan
-#7 Offizierswerdung nach Zügen auf V-Brett:         		: Dan
+#7 (DONE) Offizierswerdung nach Zügen auf V-Brett:         	: Dan
 #8 (DONE) Mehrfachsprünge auf V-Brett                      	: Dan
 #9 (DONE) Offizierswerdung					: Tim
 #10(DONE) Siegbedingungen					: Tim

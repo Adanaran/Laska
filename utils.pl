@@ -33,8 +33,7 @@ feldZwischen(Start,Ziel,FeldZwischen):-
 	atom_number(AStart, ZStart),
 	atom_number(AZiel, ZZiel),
 	ZZwischen is (ZStart + ZZiel)/2,
-	atomic_concat(BZwischen,ZZwischen,FeldZwischen),
-	true.
+	atomic_concat(BZwischen,ZZwischen,FeldZwischen).
 
 % ------------------------------------------------------------------------
 %  buchstabeZwischen(+ersterBuchstabe,+zweiterBuchstabe,-BuchstabeZwische

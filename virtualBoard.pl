@@ -1,6 +1,3 @@
-%:-[laskazug].
-%:-[utils].
-
 feld(a1,1).
 feld(a3,2).
 feld(a5,3).
@@ -100,15 +97,17 @@ virtuellZiehen([Farbe|Brett],Zugfolge,PResOffizier):-
 	L >= 4,
 	0 is L mod 2,
 	virtuellZug(Brett,Farbe,Zugfolge,L,PRes), !,
-	offizier(PRes,Zugfolge,L,PResOffizier),
-	true.
+	offizier(PRes,Zugfolge,L,PResOffizier).
 
 virtuellZiehen(_,_,_):-
-	nl,write('Ungültige Eingabe!'),nl,nl,
-	true.
+	nl,write('Ungültige Eingabe!'),nl,nl.
 
 % ------------------------------------------------------------------------
-%
+%  offizier(+P,+Zufgolge,+N,-PRes).
+%   Überprüft und ändert mögliche Offizierswerdungen in P nach dem
+%   letzten Zug Zugfolge, die N lang war. Das Ergebnis wird in PRes
+%   gebunden. Sollten keine Offiziere entstanden sein, wird in P an PRes
+%   gebunden.
 
 offizier([schwarz|Brett],Zugfolge,N,PRes):-
 	NStart is N - 2,
@@ -121,9 +120,7 @@ offizier([schwarz|Brett],Zugfolge,N,PRes):-
 	append([g],TurmOhneKopf,TurmMitKopf),
 	nth1(Index,BrettRes,TurmMitKopf,BrettRest),
 
-	append([schwarz],BrettRes,PRes),
-
-	true.
+	append([schwarz],BrettRes,PRes).
 
 offizier([weiss|Brett],Zugfolge,N,PRes):-
 	NStart is N - 2,
@@ -136,9 +133,7 @@ offizier([weiss|Brett],Zugfolge,N,PRes):-
 	append([r],TurmOhneKopf,TurmMitKopf),
 	nth1(Index,BrettRes,TurmMitKopf,BrettRest),
 
-	append([weiss],BrettRes,PRes),
-
-	true.
+	append([weiss],BrettRes,PRes).
 
 offizier(P,_,_,P).
 
