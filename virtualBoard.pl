@@ -32,7 +32,7 @@ turmAufFeld(Brett, Koordinate, Turm) :-
 	nth1(Index,Brett,Turm).
 
 virtualisiereBrett([Farbe|P]) :-
-	farbe(Farbe),
+	farbe(Farbe),!,
 
 	brett(a1,Turm1),
 	append([],[Turm1],P2),
