@@ -7,12 +7,19 @@ max_am_zug(schwarz).
 minimax(P,B,V) :-
 % L = Liste der unmittelbaren Nachfolger von P
 %     (aus legalen Zuegen)
-	listeVBretter(P,L), !,
+	listeVBretter(P,L),
+	nl,nl,nl,
+	write("L:"),nl,write(L),
+	nl,nl,nl,
+	!,
 % Besten Nachfolger ermitteln
 	best(L,B,V);
 % P ist Blattknoten mit statischer Bewertung V
 	bewerte(P,V),
-	nl,nl,nl,write(V), write(B),nl,nl,nl.
+	nl,nl,nl,
+	write("V:"),nl,write(V),
+	write("B:"),nl,write(B),
+	nl,nl,nl.
 
 best([P],P,V) :-
 	minimax(P,_,V), !.
