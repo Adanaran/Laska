@@ -1,2 +1,0 @@
-:-[bewertung].
-:-[minimax].

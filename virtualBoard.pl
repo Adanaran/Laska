@@ -1,5 +1,5 @@
-:-[laskazug].
-:-[utils].
+%:-[laskazug].
+%:-[utils].
 
 feld(a1,1).
 feld(a3,2).

@@ -3,7 +3,7 @@
 :- retractall(fehler(_,_)). %Entfernt Reste vorheriger Spiele aus dem Speicher
 fehler(nein,weiss).	% Schwarz beginnt das Spiel, s.u.!!
 
-:- ['boardimproved.pl'].
+%:- ['boardimproved.pl'].
 
 dialog :-
 	farbe(Farbe),
@@ -13,6 +13,15 @@ dialog :-
 	zugAuswahl(Farbe,Züge),
 	fail.
 
+dialogKI(Farbe) :-
+	farbe(Spieler),
+	schreibeBrett(Spieler),
+	(   Spieler == Farbe,
+	    zugKI;
+	echtZüge(Farbe,Züge),
+	\+sieg(Farbe,Züge,' kann nicht mehr ziehen.'),
+	zugAuswahl(Farbe,Züge)),
+	fail.
 
 zugAuswahl(Farbe,Zugliste) :-
 	nl,

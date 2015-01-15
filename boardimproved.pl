@@ -19,6 +19,7 @@
 %
 :- dynamic
 	brett/2.
+:- retractall(brett(_,_)).
 brett(a1,[w]).
 brett(a3,[w]).
 brett(a5,[w]).

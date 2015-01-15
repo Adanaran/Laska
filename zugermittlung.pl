@@ -1,7 +1,7 @@
 %:-[laskazug].
 %:-retractall(brett(_,_)).
 %:-[laskazug].
-:-[virtualBoard].
+%:-[virtualBoard].
 
 testbrett :-
 retractall(brett(_,_)),
@@ -37,7 +37,7 @@ assert(brett(g7,[])).
 %	Aktuell: Test von Offizierswerdung per Zug und Sprung beider
 %	Seiten.
 %
-:-testbrett.
+%:-testbrett.
 
 %%---------------------------------------------------------------------
 % Zieht automatisch und ohne Beachtung der Regeln einige Züge.
