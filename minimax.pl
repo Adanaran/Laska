@@ -10,25 +10,10 @@ minimax(P,P,V,2):-
 minimax(P,B,V,T) :-
 % L = Liste der unmittelbaren Nachfolger von P
 %     (aus legalen Zuegen)
-
 	listeVBretter(P,L),!,
 
-	nl,nl,nl,
-	write('L ist'),nl,writeListOfList(L),
-	nl,nl,nl,
-
 % Besten Nachfolger ermitteln
-	best(L,B,V,T),
-
-	nth0(26,B,Z),
-	nl,nl,nl,
-	write('V:'),write(V),nl,
-	write('B:'),write(B),nl,
-	write('Zug:'),write(Z),nl,
-	nl,nl,nl. %;
-
-% P ist Blattknoten mit statischer Bewertung V
-%	siegWertung(P,V).
+	best(L,B,V,T).
 
 best([P],P,V,T) :-
 	T1 is T + 1,
