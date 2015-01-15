@@ -4,7 +4,7 @@ config(wert_rand,1).
 config(wert_doppelTurm,1).
 config(wert_zug,1).
 config(wert_befreibarerTürme,1).
-config(max_tiefe_ki,3).
+config(max_tiefe_ki,2).
 
 config(wert_SprungLänge_x,1,2):-!.
 config(wert_SprungLänge_x,2,5):-!.
