@@ -3,8 +3,6 @@
 :- retractall(fehler(_,_)). %Entfernt Reste vorheriger Spiele aus dem Speicher
 fehler(nein,weiss).	% Schwarz beginnt das Spiel, s.u.!!
 
-%:- ['boardimproved.pl'].
-
 dialog :-
 	farbe(Farbe),
 	schreibeBrett(Farbe),
@@ -26,7 +24,9 @@ dialogKI(Farbe) :-
 zugDurchführen(Farbe,Farbe,P,_) :-
 	    time(minimax(P,B,_,0)),
 	    nth0(26,B,Zug),
-	    ziehen(Farbe,Zug),!.
+	    ziehen(Farbe,Zug),
+	    write('KI zieht '),
+	    write(Zug),nl,!.
 
 zugDurchführen(_,Spieler,_,Züge):-
 	    zugAuswahl(Spieler,Züge),!.
