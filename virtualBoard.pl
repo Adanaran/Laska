@@ -213,5 +213,13 @@ virtuellZug(Brett,weiss,Zugfolge,4,PRes):-
 	nth1(IndexZ,BrettRes,TurmZiehendMitKopf,BrettRest3),
 	append([schwarz],BrettRes,PRes).
 
+%SPRÜNGE_MEHRFACH
+virtuellZug(Brett,Farbe,Zugfolge,N,PRes):-
+	sub_atom(Zugfolge,0,4,_,Zug1),
+	NNeu is N - 2,
+	sub_atom(Zugfolge,2,NNeu,_,ZugRest),
+	virtuellZug(Brett,Farbe,Zug1,4,[_|NeuBrett]),
+	virtuellZug(NeuBrett,Farbe,ZugRest,NNeu,PRes).
+
 
 
