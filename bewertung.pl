@@ -1,9 +1,3 @@
-%:-[board].
-%:-[config].
-%:-[zugermittlung].
-%:-[virtualBoard].
-%:-[utils].
-
 %----------------------------------------------------------------
 % addiereSteinWert(+P,+Feld,+Summand,-Summe).
 %  Addiert den Wert des Steines auf Feld von P, wenn es ein Stein von
@@ -141,6 +135,26 @@ addiereEigeneZüge(P,Summand,Summe):-
 	summiereZugWerte(P,Züge,Wert),
 	Summe is Summand + Wert.
 
+% ------------------------------------------------------------------------
+%  addiereSiegWertung(+P,+Summand,-Summe).
+%   Addiert die Bewertung für ein Siegbrett, wenn der Gegener keine Züge
+%   mehr auf P hat.
+
+addiereSiegWertung([schwarz|Brett],Summand,Summe):-
+	append([weiss],Brett,PGegner),
+	züge(PGegner,[]),
+	config(wert_sieg,Wert),
+	Summe is Summand + Wert,
+	true.
+
+addiereSiegWertung([weiss|Brett],Summand,Summe):-
+	append([schwarz],Brett,PGegner),
+	züge(PGegner,[]),
+	config(wert_sieg,Wert),
+	Summe is Summand + Wert,
+	true.
+
+addiereSiegWertung(_,Summand,Summand).
 
 % ---------------------------------------------------------------
 %  Startprädikat bewerte(+P,-Bewertung).
@@ -216,7 +230,10 @@ bewerte(P,Bewertung):-
 	addiereTurmWert(P,g7,Zwischen61,Zwischen62),
 
 	%Eigene Züge addieren
-	addiereEigeneZüge(P,Zwischen62,Bewertung),!,
+	addiereEigeneZüge(P,Zwischen62,Zwischen63),
+
+	%Siegbrett werten
+	addiereSiegWertung(P,Zwischen63,Bewertung),!,
 
 	true.
 

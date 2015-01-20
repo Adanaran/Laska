@@ -14,4 +14,5 @@
 #14 (DONE) Debug Output Züge entfernen				: Tim
 #15 MiniMax Doku						: Malte
 #16 Doku Rest							: Tim
-#17 Rumtesten							: Dan
+#17 (DONE) Rumtesten							: Dan
+#18 (DONE) Siegbedingung in Bewertungsfunktion			: Dan
