@@ -22,7 +22,8 @@ alphabeta(P,A,B,G,V,T) :-
 	% Liste der Nachfolger-Positionen aus legalen Zügen
 	listeVBretter(P,L), !,
 	% finde G aus L
-	beste(L,A,B,G,V,T).
+	beste(L,A,B,G,V,T);
+	siegWertung(P,V).
 
 beste([P|L],A,B,Pg,Vg,T) :-
 	T1 is T + 1,
