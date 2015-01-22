@@ -16,8 +16,7 @@ minimax(P,B,V,T) :-
 	listeVBretter(P,L),
 
 % Besten Nachfolger ermitteln
-	best(L,B,V,T).%;
-%	siegWertung(P,V).
+	best(L,B,V,T).
 
 minimax(P,P,V,_):-
 	siegWertung(P,V).
