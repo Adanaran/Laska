@@ -17,3 +17,4 @@
 #17 (DONE) Rumtesten                                            : Dan
 #18 (DONE) Siegbedingung in Bewertungsfunktion                  : Dan
 #19 Fehler bei KI weiss, Zugfolge (3,2)                         : Tim
+#20 Dokumentation Entwicklungsansätze                           : Dan
