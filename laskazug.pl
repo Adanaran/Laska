@@ -10,6 +10,7 @@ gesamtzeit(0).
 zugDurchführen(Farbe,Farbe,P,_) :-
 	statistics(walltime,_),
 	minimax(P,B,_,0),
+	%alphabeta(P,-100000,100000,B,_),
 	statistics(walltime,[_,Zugzeit]),
 	gesamtzeit(BisherigeZeit),
 	Gesamtzeit is BisherigeZeit + Zugzeit,
