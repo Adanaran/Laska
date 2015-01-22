@@ -13,10 +13,12 @@ minimax(P,P,V,T):-
 minimax(P,B,V,T) :-
 % L = Liste der unmittelbaren Nachfolger von P
 %     (aus legalen Zuegen)
-	listeVBretter(P,L),!,
+	listeVBretter(P,L),
 
 % Besten Nachfolger ermitteln
-	best(L,B,V,T);
+	L \= [],
+	best(L,B,V,T).
+minimax(P,P,V,_):-
 	siegWertung(P,V).
 
 best([P],P,V,T) :-
@@ -28,17 +30,17 @@ best([P1|L],Pm,Vm,T) :-
 	T1 is T + 1,
 	minimax(P1,_,V1,T1),
 	best(L,P2,V2,T),
-	besser(P1,V1,P2,V2,Pm,Vm).
+	besser(P1,V1,P2,V2,Pm,Vm),!.
 
 % P0 ist besser als P1
 besser(P0,V0,_,V1,P0,V0) :-
 % in der Folgeposition ist MIN am Zug,
 	min_am_zug(P0),
 % aus Sicht des Vorgaengers jedoch MAX ...
-	V0 >= V1, !;
+	V0 > V1, !;
 % ... und umgekehrt
 	max_am_zug(P0),
-	V0 =< V1, !.
+	V0 < V1, !.
 
 % P1 ist besser als P0
 besser(_,_,P1,V1,P1,V1).
