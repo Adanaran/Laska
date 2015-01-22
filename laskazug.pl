@@ -17,20 +17,26 @@ zugAuswahl(Farbe,Zugliste) :-
 	nl,
 	writeZugliste(Zugliste,1),
 	read(Menüauswahl),
-	integer(Menüauswahl),
-	(
-	    nth1(Menüauswahl,Zugliste,Zugfolge),
-	    ziehen(Farbe,Zugfolge)
-	    ;
-	    Menüauswahl == 0,
-	    sieg(Farbe,[],' hat aufgegeben')
-	).
+	wähleZug(Farbe,Zugliste,Menüauswahl).
+
+wähleZug(Farbe,Zugliste,Auswahl):-
+	integer(Auswahl),
+	nth1(Auswahl,Zugliste,Zugfolge),
+	ziehen(Farbe,Zugfolge).
+
+wähleZug(Farbe,_,Auswahl):-
+	integer(Auswahl),
+	Auswahl =:= 0,
+	sieg(Farbe,[],' hat aufgegeben').
+
+wähleZug(Farbe,_,Auswahl):-
+	ziehen(Farbe,Auswahl).
+
 
 writeZugliste(_,1):-
 	write('0'), write(' - Aufgeben'), nl, fail.
 
-writeZugliste([],Index):-
-	write('>='), write(Index), write(' - Spieler wechseln'),nl.
+writeZugliste([],_).
 
 writeZugliste([Head|Tail],Index):-
 	write(Index), write(' - '), write(Head),nl,
