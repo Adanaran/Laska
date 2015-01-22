@@ -4,14 +4,14 @@
 fehler(nein,weiss).	% Schwarz beginnt das Spiel, s.u.!!
 
 zugDurchführen(Farbe,Farbe,P,_) :-
-	    time(minimax(P,B,_,0)),
-	    nth0(26,B,Zug),
-	    ziehen(Farbe,Zug),
-	    write('KI zieht '),
-	    write(Zug),nl,!.
+	time(minimax(P,B,_,0)),
+	nth0(26,B,Zug),
+	ziehen(Farbe,Zug),
+	write('KI zieht '),
+	write(Zug),nl,!.
 
 zugDurchführen(_,Spieler,_,Züge):-
-	    zugAuswahl(Spieler,Züge),!.
+	zugAuswahl(Spieler,Züge),!.
 
 zugAuswahl(Farbe,Zugliste) :-
 	nl,
@@ -29,9 +29,10 @@ wähleZug(Farbe,_,Auswahl):-
 	Auswahl =:= 0,
 	sieg(Farbe,[],' hat aufgegeben').
 
-wähleZug(Farbe,_,Auswahl):-
-	ziehen(Farbe,Auswahl).
-
+wähleZug(Farbe,Zugliste,Auswahl):-
+	member(Auswahl,Zugliste),
+	ziehen(Farbe,Auswahl);
+	ziehen(Farbe,ungültig).
 
 writeZugliste(_,1):-
 	write('0'), write(' - Aufgeben'), nl, fail.
