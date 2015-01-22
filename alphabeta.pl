@@ -28,6 +28,9 @@ alphabeta(P,A,B,G,V,T) :-
 alphabeta(P,_,_,P,V,_):-
 	siegWertung(P,V).
 
+beste([P],_,_,P,V,0) :-
+	siegWertung(P,V), !.
+
 beste([P|L],A,B,Pg,Vg,T) :-
 	T1 is T + 1,
 	alphabeta(P,A,B,_,V,T1),
