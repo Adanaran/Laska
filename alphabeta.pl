@@ -15,7 +15,7 @@
 %
 
 alphabeta(P,_,_,P,V,T):-
-	config(max_tiefe_ki,T),
+	config(max_tiefe_ab_ki,T),
 	siegWertung(P,V),!.
 
 alphabeta(P,A,B,G,V,T) :-

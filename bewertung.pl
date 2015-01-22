@@ -247,7 +247,7 @@ bewerte(P,Bewertung):-
 %   +Unendlich gut, für weiß ist ein Wert gegen -Unendlich ideal.
 
 siegWertung([_|Brett],Wertung):-
-	ki(F),
+	farbe(F),
 	gegner(F,G),
 	append([F],Brett,IchBrett),
 	append([G],Brett,GegnerBrett),

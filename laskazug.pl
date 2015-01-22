@@ -8,7 +8,14 @@ fehler(nein,weiss).	% Schwarz beginnt das Spiel, s.u.!!
 :-retractall(gesamtzeit(_)).
 gesamtzeit(0).
 
+:-dynamic
+	gesamtzeit2/1.
+:-retractall(gesamtzeit2(_)).
+gesamtzeit2(0).
+
+
 zugDurchführen(Farbe,Farbe,P,_) :-
+%	read(_),
 	statistics(walltime,_),
 %	minimax(P,GP,V,0),
 	alphabeta(P,-100000,100000,GP,V,0),
@@ -30,8 +37,32 @@ zugDurchführen(Farbe,Farbe,P,_) :-
 	write('KI zieht '),
 	write(Zug),nl,!.
 
-zugDurchführen(_,Spieler,_,Züge):-
-	zugAuswahl(Spieler,Züge),!.
+zugDurchführen(Farbe,_,P,_) :-
+	gegner(Farbe,Ich),
+%	read(_),
+	statistics(walltime,_),
+	minimax(P,GP,V,0),
+%	alphabeta(P,-100000,100000,GP,V,0),
+	write('Zug: '),writeln(GP),
+	write('Bewertung: '), writeln(V),
+	statistics(walltime,[_,Zugzeit]),
+	gesamtzeit2(BisherigeZeit),
+	Gesamtzeit is BisherigeZeit + Zugzeit,
+	retractall(gesamtzeit2(_)),
+	assert(gesamtzeit2(Gesamtzeit)),
+	ZugSekunden is Zugzeit / 1000,
+	Sekunden is Gesamtzeit div 1000,
+	Sec is Sekunden mod 60,
+	Minuten is Sekunden div 60,
+	ansi_format([fg(green)],'Berechnungszeit (Last/All): ~ws / ~wmin:~ws',[ZugSekunden,Minuten,Sec]),
+	nl,
+	nth0(26,GP,Zug),
+	ziehen(Ich,Zug),
+	write('KI zieht '),
+	write(Zug),nl,!.
+
+%zugDurchführen(_,Spieler,_,Züge):-
+	%zugAuswahl(Spieler,Züge),!.
 
 zugAuswahl(Farbe,Zugliste) :-
 	nl,
