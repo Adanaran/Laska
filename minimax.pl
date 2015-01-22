@@ -1,9 +1,13 @@
-min_am_zug([weiss|_]).
+min_am_zug([Farbe|_]):-
+	\+ki(Farbe).
 
-max_am_zug([schwarz|_]).
+max_am_zug([Farbe|_]):-
+	ki(Farbe).
 
-minimax(P,P,V,2):-
-	siegWertung(P,V).
+minimax(P,P,V,T):-
+	write('Tiefe: '),writeln(T),
+	config(max_tiefe_ki,T),
+	siegWertung(P,V),!.
 
 % P = (aktuelle) Position mit Minimax-Wert V,
 % B = Position nach bestem Zug

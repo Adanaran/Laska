@@ -3,24 +3,6 @@
 :- retractall(fehler(_,_)). %Entfernt Reste vorheriger Spiele aus dem Speicher
 fehler(nein,weiss).	% Schwarz beginnt das Spiel, s.u.!!
 
-dialog :-
-	farbe(Farbe),
-	schreibeBrett(Farbe),
-	echtZüge(Farbe,Züge),
-	\+sieg(Farbe,Züge,' kann nicht mehr ziehen.'),
-	zugAuswahl(Farbe,Züge),
-	fail.
-
-dialogKI(Farbe) :-
-	farbe(Spieler),
-	virtualisiereBrett(P),
-	schreibeBrett(Spieler),
-	echtZüge(Spieler,Züge),
-	\+sieg(Spieler,Züge,' kann nicht mehr ziehen.'),
-	zugDurchführen(Farbe,Spieler,P,Züge),
-	fail.
-
-
 zugDurchführen(Farbe,Farbe,P,_) :-
 	    time(minimax(P,B,_,0)),
 	    nth0(26,B,Zug),
