@@ -3,7 +3,6 @@ min_am_zug([weiss|_]).
 max_am_zug([schwarz|_]).
 
 minimax(P,P,V,T):-
-	write('Tiefe: '),writeln(T),
 	config(max_tiefe_ki,T),
 	siegWertung(P,V),!.
 

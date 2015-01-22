@@ -142,14 +142,16 @@ addiereEigeneZüge(P,Summand,Summe):-
 
 addiereSiegWertung([schwarz|Brett],Summand,Summe):-
 	append([weiss],Brett,PGegner),
-	züge(PGegner,[]),
+	züge(PGegner,Liste),
+	Liste \= [],
 	config(wert_sieg,Wert),
 	Summe is Summand + Wert,!,
 	true.
 
 addiereSiegWertung([weiss|Brett],Summand,Summe):-
 	append([schwarz],Brett,PGegner),
-	züge(PGegner,[]),
+	züge(PGegner,Liste),
+	Liste \= [],
 	config(wert_sieg,Wert),
 	Summe is Summand + Wert,!,
 	true.
@@ -248,5 +250,5 @@ siegWertung([_|Brett],Wertung):-
 	append([schwarz],Brett,SchwarzBrett),
 	append([weiss],Brett,WeissBrett),
 	bewerte(WeissBrett,WeissWert),
-	bewerte(SchwarzBrett,SchwarzWert),
+        bewerte(SchwarzBrett,SchwarzWert),
 	Wertung is SchwarzWert - WeissWert.
