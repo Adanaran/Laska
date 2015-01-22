@@ -1,30 +1,30 @@
 testbrett :-
 retractall(brett(_,_)),
 assert(brett(a1,[])),
-assert(brett(a3,[])),
+assert(brett(a3,[r,w,w])),
 assert(brett(a5,[])),
 assert(brett(a7,[])),
-assert(brett(b2,[s])),
+assert(brett(b2,[r,w,w])),
 assert(brett(b4,[])),
 assert(brett(b6,[w])),
 assert(brett(c1,[])),
-assert(brett(c3,[])),
-assert(brett(c5,[s])),
+assert(brett(c3,[s,w])),
+assert(brett(c5,[])),
 assert(brett(c7,[])),
 assert(brett(d2,[])),  % diese drei Felder
 assert(brett(d4,[])), % (12, 13 und 14)
-assert(brett(d6,[])), % sind anfangs (normalerweise) unbesetzt
-assert(brett(e1,[])),
-assert(brett(e3,[])),
-assert(brett(e5,[w])),
-assert(brett(e7,[])),
-assert(brett(f2,[w])),
-assert(brett(f4,[])),
-assert(brett(f6,[s])),
+assert(brett(d6,[s,w])), % sind anfangs (normalerweise) unbesetzt
+assert(brett(e1,[s,w])),
+assert(brett(e3,[s,w])),
+assert(brett(e5,[])),
+assert(brett(e7,[s])),
+assert(brett(f2,[r,s])),
+assert(brett(f4,[w,w])),
+assert(brett(f6,[])),
 assert(brett(g1,[])),
 assert(brett(g3,[])),
-assert(brett(g5,[])),
-assert(brett(g7,[])).
+assert(brett(g5,[s])),
+assert(brett(g7,[s])).
 %%	Testbrett für den Fall dass Sondersituationen gebaut werden
 %	müssen.
 %	Und das ganz bequem einkommentierbar :D
@@ -32,7 +32,7 @@ assert(brett(g7,[])).
 %	Aktuell: Test von Offizierswerdung per Zug und Sprung beider
 %	Seiten.
 %
-%:-testbrett.
+:-testbrett.
 
 %%---------------------------------------------------------------------
 % Zieht automatisch und ohne Beachtung der Regeln einige Züge.

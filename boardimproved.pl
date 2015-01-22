@@ -208,6 +208,7 @@ kopfsymbol(g,'G').
 kopfsymbol(r,'R').
 
 % Leerzeichen zum Auffüllen in gleicher Weise
+fuellen(0,'').
 fuellen(1,' ').
 fuellen(2,'  ').
 fuellen(3,'   ').
@@ -218,5 +219,3 @@ fuellen(7,'       ').
 fuellen(8,'        ').
 fuellen(9,'         ').
 fuellen(10,'          ').
-fuellen(_,'').
-
