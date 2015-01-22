@@ -16,30 +16,32 @@
 
 alphabeta(P,_,_,P,V,T):-
 	config(max_tiefe_ki,T),
-	siegWertung(P,V).
+	siegWertung(P,V),!.
 
 alphabeta(P,A,B,G,V,T) :-
 	% Liste der Nachfolger-Positionen aus legalen Zügen
 	listeVBretter(P,L), !,
 	% finde G aus L
-	beste(L,A,B,G,V,T).
+	beste(L,A,B,G,V,T);
+	siegWertung(P,V).
 
 beste([P|L],A,B,Pg,Vg,T) :-
-	alphabeta(P,A,B,_,V,T),
-	gutgenug(L,A,B,P,V,Pg,Vg).
+	T1 is T + 1,
+	alphabeta(P,A,B,_,V,T1),
+	gutgenug(L,A,B,P,V,Pg,Vg,T).
 
 % Knoten ist einziger Kandidat
-gutgenug([],_,_,P,V,P,V) :- !.
+gutgenug([],_,_,P,V,P,V,_) :- !.
 
 % Bewertung erreicht einen der Grenzwerte
-gutgenug(_,A,B,P,V,P,V) :-
+gutgenug(_,A,B,P,V,P,V,_) :-
 	min_am_zug(P), V > B, !;
 	max_am_zug(P), V < A, !.
 
-gutgenug(L,A,B,P,V,Pg,Vg) :-
+gutgenug(L,A,B,P,V,Pg,Vg,T) :-
 	% "verschiebe" A, B
 	neueAB(A,B,P,V,An,Bn),
-	beste(L,An,Bn,P1,V1),
+	beste(L,An,Bn,P1,V1,T),
 	besser(P,V,P1,V1,Pg,Vg).
 
 neueAB(A,B,P,V,V,B) :-

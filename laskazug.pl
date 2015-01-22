@@ -10,8 +10,10 @@ gesamtzeit(0).
 
 zugDurchführen(Farbe,Farbe,P,_) :-
 	statistics(walltime,_),
-	minimax(P,B,_,0),
-	%alphabeta(P,-100000,100000,B,_),
+%	minimax(P,GP,V,0),
+	alphabeta(P,-100000,100000,GP,V,0),
+	write('Zug: '),writeln(GP),
+	write('Bewertung: '), writeln(V),
 	statistics(walltime,[_,Zugzeit]),
 	gesamtzeit(BisherigeZeit),
 	Gesamtzeit is BisherigeZeit + Zugzeit,
@@ -23,7 +25,7 @@ zugDurchführen(Farbe,Farbe,P,_) :-
 	Minuten is Sekunden div 60,
 	ansi_format([fg(green)],'Berechnungszeit (Last/All): ~ws / ~wmin:~ws',[ZugSekunden,Minuten,Sec]),
 	nl,
-	nth0(26,B,Zug),
+	nth0(26,GP,Zug),
 	ziehen(Farbe,Zug),
 	write('KI zieht '),
 	write(Zug),nl,!.
