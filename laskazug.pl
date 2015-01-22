@@ -4,8 +4,9 @@
 fehler(nein,weiss).	% Schwarz beginnt das Spiel, s.u.!!
 
 zugDurchführen(Farbe,Farbe,P,_) :-
-	    time(minimax(P,B,_,0)),
-	    nth0(26,B,Zug),
+%	    time(minimax(P,GP,_,0)),
+	    time(alphabeta(P,-100000,100000,GP,_)),
+	    nth0(26,GP,Zug),
 	    ziehen(Farbe,Zug),
 	    write('KI zieht '),
 	    write(Zug),nl,!.

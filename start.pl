@@ -7,6 +7,7 @@
 :- [bewertung].
 :- [lki].
 :- [minimax].
+:- [alphabeta].
 
 dialog :-
 	farbe(Farbe),
