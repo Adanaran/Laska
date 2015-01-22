@@ -32,7 +32,7 @@ assert(brett(g7,[s])).
 %	Aktuell: Test von Offizierswerdung per Zug und Sprung beider
 %	Seiten.
 %
-:-testbrett.
+%:-testbrett.
 
 %%---------------------------------------------------------------------
 % Zieht automatisch und ohne Beachtung der Regeln einige Züge.

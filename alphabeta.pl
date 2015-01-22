@@ -20,9 +20,12 @@ alphabeta(P,_,_,P,V,T):-
 
 alphabeta(P,A,B,G,V,T) :-
 	% Liste der Nachfolger-Positionen aus legalen Zügen
-	listeVBretter(P,L), !,
+	listeVBretter(P,L),
 	% finde G aus L
 	beste(L,A,B,G,V,T);
+	siegWertung(P,V).
+
+alphabeta(P,_,_,P,V,_):-
 	siegWertung(P,V).
 
 beste([P|L],A,B,Pg,Vg,T) :-
