@@ -16,7 +16,8 @@ minimax(P,B,V,T) :-
 	listeVBretter(P,L),!,
 
 % Besten Nachfolger ermitteln
-	best(L,B,V,T).
+	best(L,B,V,T);
+	siegWertung(P,V).
 
 best([P],P,V,T) :-
 	T1 is T + 1,
@@ -34,10 +35,10 @@ besser(P0,V0,_,V1,P0,V0) :-
 % in der Folgeposition ist MIN am Zug,
 	min_am_zug(P0),
 % aus Sicht des Vorgaengers jedoch MAX ...
-	V0 > V1, !;
+	V0 >= V1, !;
 % ... und umgekehrt
 	max_am_zug(P0),
-	V0 < V1, !.
+	V0 =< V1, !.
 
 % P1 ist besser als P0
 besser(_,_,P1,V1,P1,V1).

@@ -5,6 +5,7 @@ fehler(nein,weiss).	% Schwarz beginnt das Spiel, s.u.!!
 
 :-dynamic
 	gesamtzeit/1.
+:-retractall(gesamtzeit(_)).
 gesamtzeit(0).
 
 zugDurchführen(Farbe,Farbe,P,_) :-
