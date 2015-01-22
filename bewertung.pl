@@ -144,14 +144,14 @@ addiereSiegWertung([schwarz|Brett],Summand,Summe):-
 	append([weiss],Brett,PGegner),
 	züge(PGegner,[]),
 	config(wert_sieg,Wert),
-	Summe is Summand + Wert,
+	Summe is Summand + Wert,!,
 	true.
 
 addiereSiegWertung([weiss|Brett],Summand,Summe):-
 	append([schwarz],Brett,PGegner),
 	züge(PGegner,[]),
 	config(wert_sieg,Wert),
-	Summe is Summand + Wert,
+	Summe is Summand + Wert,!,
 	true.
 
 addiereSiegWertung(_,Summand,Summand).
