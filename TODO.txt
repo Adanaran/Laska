@@ -9,10 +9,11 @@
 #9  (DONE) Offizierswerdung                                     : Tim
 #10 (DONE) Siegbedingungen                                      : Tim
 #11 (DONE) Schickeres Spielfeld und Zugauswahl per Menü         : Tim
-#12 Farbe KI in Config als Dynamik                              : Malte
+#12 (DONE) Farbe KI in Config als Dynamik                       : Malte
 #13 (DONE) MiniMax Tiefe runterzählen + Config                  : Malte
 #14 (DONE) Debug Output Züge entfernen                          : Tim
 #15 MiniMax Doku                                                : Malte
 #16 Doku Rest                                                   : Tim
 #17 (DONE) Rumtesten                                            : Dan
 #18 (DONE) Siegbedingung in Bewertungsfunktion                  : Dan
+#19 Fehler bei KI weiss, Zugfolge (3,2)                         : Tim

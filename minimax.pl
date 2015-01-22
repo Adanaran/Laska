@@ -1,6 +1,8 @@
-min_am_zug([weiss|_]).
+min_am_zug([Farbe|_]):-
+	\+ki(Farbe).
 
-max_am_zug([schwarz|_]).
+max_am_zug([Farbe|_]):-
+	ki(Farbe).
 
 minimax(P,P,V,T):-
 	config(max_tiefe_ki,T),

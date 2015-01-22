@@ -13,3 +13,5 @@ config(wert_SprungLänge_x,3,10):-!.
 config(wert_SprungLänge_x,4,20):-!.
 config(wert_SprungLänge_x,_,40).
 
+:- dynamic ki/1.
+
