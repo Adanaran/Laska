@@ -191,7 +191,7 @@ virtuellZug(Brett,weiss,Zugfolge,4,PRes):-
 	nth1(IndexA,P2,[],PRest),
 
 	nth1(IndexZ,P2,_,PRest2),
-	nth1(IndexZ,[_|BrettRes],Turm,PRest2),
+	nth1(IndexZ,BrettRes,Turm,PRest2),
 	append([schwarz],BrettRes,PRes).
 
 %SPRÜNGE_EINFACH

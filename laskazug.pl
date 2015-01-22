@@ -4,34 +4,41 @@
 fehler(nein,weiss).	% Schwarz beginnt das Spiel, s.u.!!
 
 zugDurchführen(Farbe,Farbe,P,_) :-
-%	    time(minimax(P,GP,_,0)),
-	    time(alphabeta(P,-100000,100000,GP,_)),
-	    nth0(26,GP,Zug),
-	    ziehen(Farbe,Zug),
-	    write('KI zieht '),
-	    write(Zug),nl,!.
+%	time(minimax(P,GP,_,0)),
+	time(alphabeta(P,-100000,100000,GP,_)),
+	nth0(26,GP,Zug),
+	ziehen(Farbe,Zug),
+	write('KI zieht '),
+	write(Zug),nl,!.
 
 zugDurchführen(_,Spieler,_,Züge):-
-	    zugAuswahl(Spieler,Züge),!.
+	zugAuswahl(Spieler,Züge),!.
 
 zugAuswahl(Farbe,Zugliste) :-
 	nl,
 	writeZugliste(Zugliste,1),
 	read(Menüauswahl),
-	integer(Menüauswahl),
-	(
-	    nth1(Menüauswahl,Zugliste,Zugfolge),
-	    ziehen(Farbe,Zugfolge)
-	    ;
-	    Menüauswahl == 0,
-	    sieg(Farbe,[],' hat aufgegeben')
-	).
+	wähleZug(Farbe,Zugliste,Menüauswahl).
+
+wähleZug(Farbe,Zugliste,Auswahl):-
+	integer(Auswahl),
+	nth1(Auswahl,Zugliste,Zugfolge),
+	ziehen(Farbe,Zugfolge).
+
+wähleZug(Farbe,_,Auswahl):-
+	integer(Auswahl),
+	Auswahl =:= 0,
+	sieg(Farbe,[],' hat aufgegeben').
+
+wähleZug(Farbe,Zugliste,Auswahl):-
+	member(Auswahl,Zugliste),
+	ziehen(Farbe,Auswahl);
+	ziehen(Farbe,ungültig).
 
 writeZugliste(_,1):-
 	write('0'), write(' - Aufgeben'), nl, fail.
 
-writeZugliste([],Index):-
-	write('>='), write(Index), write(' - Spieler wechseln'),nl.
+writeZugliste([],_).
 
 writeZugliste([Head|Tail],Index):-
 	write(Index), write(' - '), write(Head),nl,

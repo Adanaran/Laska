@@ -5,7 +5,6 @@ max_am_zug([Farbe|_]):-
 	ki(Farbe).
 
 minimax(P,P,V,T):-
-	write('Tiefe: '),writeln(T),
 	config(max_tiefe_ki,T),
 	siegWertung(P,V),!.
 

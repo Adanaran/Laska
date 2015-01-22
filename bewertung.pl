@@ -142,16 +142,18 @@ addiereEigeneZüge(P,Summand,Summe):-
 
 addiereSiegWertung([schwarz|Brett],Summand,Summe):-
 	append([weiss],Brett,PGegner),
-	züge(PGegner,[]),
+	züge(PGegner,Liste),
+	Liste \= [],
 	config(wert_sieg,Wert),
-	Summe is Summand + Wert,
+	Summe is Summand + Wert,!,
 	true.
 
 addiereSiegWertung([weiss|Brett],Summand,Summe):-
 	append([schwarz],Brett,PGegner),
-	züge(PGegner,[]),
+	züge(PGegner,Liste),
+	Liste \= [],
 	config(wert_sieg,Wert),
-	Summe is Summand + Wert,
+	Summe is Summand + Wert,!,
 	true.
 
 addiereSiegWertung(_,Summand,Summand).
@@ -245,8 +247,10 @@ bewerte(P,Bewertung):-
 %   +Unendlich gut, für weiß ist ein Wert gegen -Unendlich ideal.
 
 siegWertung([_|Brett],Wertung):-
-	append([schwarz],Brett,SchwarzBrett),
-	append([weiss],Brett,WeissBrett),
-	bewerte(WeissBrett,WeissWert),
-	bewerte(SchwarzBrett,SchwarzWert),
-	Wertung is SchwarzWert - WeissWert.
+	ki(F),
+	gegner(F,G),
+	append([F],Brett,IchBrett),
+	append([G],Brett,GegnerBrett),
+	bewerte(GegnerBrett,GegnerWert),
+        bewerte(IchBrett,IchWert),
+	Wertung is IchWert - GegnerWert.
