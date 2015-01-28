@@ -7,7 +7,24 @@ fehler(nein,weiss).	% Schwarz beginnt das Spiel, s.u.!!
 	gesamtzeit/1.
 :-retractall(gesamtzeit(_)).
 gesamtzeit(0).
-
+zugDurchführen(Farbe,Farbe,_,Züge):-
+	statistics(walltime,_),
+	length(Züge,1),
+	statistics(walltime,[_,Zugzeit]),
+	gesamtzeit(BisherigeZeit),
+	Gesamtzeit is BisherigeZeit + Zugzeit,
+	retractall(gesamtzeit(_)),
+	assert(gesamtzeit(Gesamtzeit)),
+	ZugSekunden is Zugzeit / 1000,
+	Sekunden is Gesamtzeit div 1000,
+	Sec is Sekunden mod 60,
+	Minuten is Sekunden div 60,
+	ansi_format([fg(green)],'Berechnungszeit (Last/All): ~ws / ~wmin:~ws',[ZugSekunden,Minuten,Sec]),
+	nl,
+	nth1(1,Züge,Zug),
+	ziehen(Farbe,Zug),
+	write('KI zieht '),
+	write(Zug),nl,!.
 zugDurchführen(Farbe,Farbe,P,_) :-
 	statistics(walltime,_),
 %	minimax(P,GP,V,0),
