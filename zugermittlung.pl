@@ -25,13 +25,9 @@ assert(brett(g1,[])),
 assert(brett(g3,[])),
 assert(brett(g5,[s])),
 assert(brett(g7,[s])).
-%%	Testbrett für den Fall dass Sondersituationen gebaut werden
-%	müssen.
-%	Und das ganz bequem einkommentierbar :D
-%
-%	Aktuell: Test von Offizierswerdung per Zug und Sprung beider
-%	Seiten.
-%
+% Testbrett für den Fall dass Sondersituationen gebaut und getestet
+% werden müssen.
+% Einfach über die nächste Zeile einkommentierbar.
 %:-testbrett.
 
 %%---------------------------------------------------------------------
@@ -55,17 +51,23 @@ zieh :-
 :- dynamic
 	sprungmöglichkeit/2.
 
-
+%% --------------------------------------------------------------------
+% listeVBretter(+P,-ListeVirtuellerBretter).
+%
+% Ermittlet auf Grundlage eines virtuellen Brettes P alle möglichen
+% Folgesitutaionen in Form einer Liste von virtuellen Brettern.
+%
+% Zugermittlung
 listeVBretter(P,ListeVBretter):-
 	züge(P,Zugliste),
 	listeVBretter(P,ListeVBretter,Zugliste),!.
-
+% Virtuelle Durchführung der gegebenen Züge und Auflistung der
+% Ergebnisse
 listeVBretter(P,ListeNeu,[Zug|Restzüge]) :-
 	virtuellZiehen(P,Zug,PRes),
 	listeVBretter(P,Liste,Restzüge),
 	append(PRes,[Zug],PmitZug),
 	append(Liste,[PmitZug],ListeNeu).
-
 listeVBretter(_,[],[]).
 
 

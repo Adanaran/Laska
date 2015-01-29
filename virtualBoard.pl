@@ -1,3 +1,8 @@
+%% ---------------------------------------------------------------------
+% feld(Koordinate,Index).
+%
+% Mapping von Brettkoordinaten auf die Position in virtuellen Brettern.
+%
 feld(a1,1).
 feld(a3,2).
 feld(a5,3).
@@ -24,10 +29,23 @@ feld(g3,23).
 feld(g5,24).
 feld(g7,25).
 
+%% ---------------------------------------------------------------------
+%
+% turmAufFeld(+Brett,-Koordinate,-Turm)
+%
+% Ermittelt anhand der Koordinate den zugehörigen Turm auf dem
+% virtuellen Brett oder umgekehrt.
+%
 turmAufFeld(Brett, Koordinate, Turm) :-
 	feld(Koordinate,Index),
 	nth1(Index,Brett,Turm).
-
+%% ---------------------------------------------------------------------
+%
+% virtuellSelbst(+Farbe,-Brett,-Feld)
+%
+% Ermittelt die zugehörigen Felder-Koordinaten der gegebenen Farbe auf
+% Basis des übergebenen virtuellen Brettes.
+%
 virtuellSelbst(schwarz,Brett,Feld,s) :-
 	turmAufFeld(Brett,Feld,[s|_]).
 virtuellSelbst(schwarz,Brett,Feld,r) :-
@@ -37,7 +55,13 @@ virtuellSelbst(weiss,Brett,Feld,w) :-
 virtuellSelbst(weiss,Brett,Feld,g) :-
 	turmAufFeld(Brett,Feld,[g|_]).
 
-
+%% ----------------------------------------------------------------------
+%
+% virtualisiereBrett(-P).
+%
+% Ermittelt auf Grundlagen des reellen Brettes eine virtualisierte Form,
+% in welcher auch die Farbe des aktuellen Spielers eingeht.
+%
 virtualisiereBrett([Farbe|P]) :-
 	farbe(Farbe),!,
 

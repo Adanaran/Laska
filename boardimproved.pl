@@ -12,6 +12,12 @@
 % Demonstriert werden auch verschiedene Programmiertechniken
 % in Prolog.
 %
+% Überarbeitet durch T. Röhrig
+%
+% Die Ausgabe der Felder wurde von write()-Ausgaben auf
+% ansi_format() umgestellt, um das Bord besser darzustellen.
+% Außerdem wurde die maximale Turmhöhe um einen Gefangengen erhöht.
+%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
 % Fakten zur Repräsentation benutzter Felder in der
