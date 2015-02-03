@@ -1,3 +1,8 @@
+% minimax.pl
+% Autor: Malte Ahlering
+%
+% Enthält Prädikate zu Suchverfahren nach MiniMax - Prinzip.
+
 min_am_zug([Farbe|_]):-
 	\+ki(Farbe).
 

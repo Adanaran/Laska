@@ -1,12 +1,19 @@
+% utils.pl
+% Autor: Dan Sörgel
+%
+% Enthält Prädikate, die global von verschiedenen anderen Prädikaten
+% verwendet werden und keiner spezifischen Aufgabe zugewiesen werden
+% können.
+
 % ------------------------------------------------------------------------
-%  gegner(+Selbst,-Gegner).
+%  gegner(?Selbst,?Gegner).
 %   Gibt den Gegenspieler von Selbst in Gegner zurück.
 
 gegner(weiss,schwarz).
 gegner(schwarz,weiss).
 
 % ------------------------------------------------------------------------
-% ermittleSprungLänge(+Zug,-Länge).
+% ermittleSprungLänge(+Zug,?Länge).
 %  Gibt die Länge von Zug in Anzahl der Bewegungen des Steines zurück.
 
 ermittleSprungLänge(Zug,Länge):-
@@ -14,14 +21,14 @@ ermittleSprungLänge(Zug,Länge):-
 	Länge is ((Atom_länge - 4) / 2) + 1.
 
 % ------------------------------------------------------------------------
-%  turmZwischen(+P,+Start,+Ziel,-Turm)
+%  turmZwischen(+P,+Start,+Ziel,?Turm)
 %   Gibt in Turm den Turm zwischen Start und Ziel zurück.
 turmZwischen([_|Brett],Start,Ziel,Turm):-
 	feldZwischen(Start,Ziel,Zwischen),
 	turmAufFeld(Brett,Zwischen,Turm).
 
 % ------------------------------------------------------------------------
-%  feldZwischen(+Start,+Ziel,-FeldZwischen).
+%  feldZwischen(+Start,+Ziel,?FeldZwischen).
 %   Gibt das Feld zwischen Start und Ziel zurück.
 
 feldZwischen(Start,Ziel,FeldZwischen):-
@@ -36,10 +43,10 @@ feldZwischen(Start,Ziel,FeldZwischen):-
 	atomic_concat(BZwischen,ZZwischen,FeldZwischen).
 
 % ------------------------------------------------------------------------
-%  buchstabeZwischen(+ersterBuchstabe,+zweiterBuchstabe,-BuchstabeZwische
-%  n)
-%   Gibt den Buchstaben zwischen ersterBuchstabe und zweiterBuchstabe
-%   zurück.
+%  buchstabeZwischen(?ersterBuchstabe,?zweiterBuchstabe,?BuchstabeZwische
+%  n).
+%  Gibt den Buchstaben zwischen ersterBuchstabe und zweiterBuchstabe
+%  zurück.
 
 buchstabeZwischen('a','c','b').
 buchstabeZwischen('b','d','c').
@@ -55,7 +62,8 @@ buchstabeZwischen('g','e','f').
 
 % ------------------------------------------------------------------------
 %  istZug(+Zug)
-%   Kann unifziziert werden, wenn Zug ein einfacher Zug ohne Schlag ist.
+%   Kann unifiziziert werden, wenn Zug ein einfacher Zug ohne Schlag
+%   ist.
 
 istZug(Zug):-
 	sub_atom(Zug,1,1,_,A1),
@@ -67,7 +75,7 @@ istZug(Zug):-
 
 % ------------------------------------------------------------------------
 %  writeListofList(+L).
-%   Schreibt eine Liste von Listen.
+%   Schreibt eine Liste von Listen auf die Konsole.
 
 writeListOfList([]).
 writeListOfList([H|T]):-

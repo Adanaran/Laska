@@ -1,4 +1,11 @@
-%% ---------------------------------------------------------------------
+% virtualBoard.pl
+% Autor: Tim Röhrig, Dan Sörgel
+%
+% Enthält Prädikate zur Verwendung des virtuellen Brettes. Das virtuelle
+% Brett wird von der Bewertungsfunktion, Zugermittlung und KI verwendet,
+% um Züge 'im Kopf' durchzuspielen.
+
+%---------------------------------------------------------------------
 % feld(Koordinate,Index).
 %
 % Mapping von Brettkoordinaten auf die Position in virtuellen Brettern.
@@ -140,7 +147,7 @@ virtuellZiehen(_,_,_):-
 %  offizier(+P,+Zufgolge,+N,-PRes).
 %   Überprüft und ändert mögliche Offizierswerdungen in P nach dem
 %   letzten Zug Zugfolge, die N lang war. Das Ergebnis wird in PRes
-%   gebunden. Sollten keine Offiziere entstanden sein, wird in P an PRes
+%   gebunden. Sollten keine Offiziere entstanden sein, wird P an PRes
 %   gebunden.
 
 offizier([schwarz|Brett],Zugfolge,N,PRes):-

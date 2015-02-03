@@ -1,3 +1,10 @@
+% zugermittlung.pl
+% Autor: Tim Röhrig
+%
+% Enthält Prädikate, um Züge auf echten und virtuellen Brettern zu
+% ermitteln und die daraus resultierenden virtuellen Bretter zu
+% ermitteln. Bietet ebenso ein konfigurierbares Testbrett an.
+
 testbrett :-
 retractall(brett(_,_)),
 assert(brett(a1,[])),

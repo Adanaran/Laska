@@ -1,3 +1,8 @@
+% alphabeta.pl
+% Autor: Malte Ahlering
+%
+% Enthält das Suchverfahren nach Alphabeta für die KI.
+
 % Alpha-Beta-Algorithmus (prinzipiell, nicht direkt lauffähig)
 % Die beiden Werte A und B legen zwei Schranken fest, die
 % den minimalen garantierten, und

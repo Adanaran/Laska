@@ -1,3 +1,9 @@
+% laskazug.pl
+% Autor: Tim Röhrig
+%
+% Enthält Prädikate zum Durchführen von Zügen auf einem realen Brett.
+% Zudem sind Prädikate für den Spieldialog vorhanden.
+
 :- dynamic
 	fehler/2.
 :- retractall(fehler(_,_)). %Entfernt Reste vorheriger Spiele aus dem Speicher

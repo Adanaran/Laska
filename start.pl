@@ -1,3 +1,10 @@
+% start.pl
+% Autor: Tim Röhrig
+%
+% Initial einzubindende Datei, die die anderen Dateien in der richtigen
+% Reihenfolge einbindet. Zusätzlich werden Startprädikate für ein
+% Laska-Spiel alleine oder gegen die KI angeboten.
+
 :- [config].
 :- [utils].
 :- [boardimproved].

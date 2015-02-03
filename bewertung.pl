@@ -1,5 +1,11 @@
+% bewertung.pl
+% Autor: Dan Sörgel
+%
+% Enthält Prädikate zur Ermittlung einer Bewertung virtueller Bretter.
+% Die KI verwendet dabei das Prädikat siegWertung\2.
+
 %----------------------------------------------------------------
-% addiereSteinWert(+P,+Feld,+Summand,-Summe).
+% addiereSteinWert(+P,+Feld,+Summand,?Summe).
 %  Addiert den Wert des Steines auf Feld von P, wenn es ein Stein von
 %  P(Farbe) ist, auf Summand und gibt das Ergbnis in Summe zurück.
 %  Sollte auf dem Feld kein Stein von Farbe geben, wird Summe als
@@ -28,7 +34,7 @@ addiereSteinWert([weiss|Brett],Feld,Summand,Summe):-
 addiereSteinWert(_,_,Summand,Summand).
 
 %----------------------------------------------------------------
-% addiereRandWert(+P,+Feld,+Summand,-Summe).
+% addiereRandWert(+P,+Feld,+Summand,?Summe).
 %  Addiert für die Randfelder extra Werte hinzu, da diese unschlagbar
 %  sind. Es wird in Summand der Wert eines Randfeldes Feld addiert,
 %  wenn es von einem Stein von Farbe besetzt ist. Das Ergebnis wird
@@ -54,7 +60,7 @@ addiereRandWert([weiss|Brett],Feld,Summand,Summe):-
 addiereRandWert(_,_,Summand,Summand).
 
 % ------------------------------------------------------------------
-%  addiereTurmWert(+P,+Feld,+Summand,-Summe).
+%  addiereTurmWert(+P,+Feld,+Summand,?Summe).
 %   Addiert für den Turm auf Feld, dessen erste und zweiter Stein vom
 %   Spieler Farbe ist den Wert für Doppeltürme auf Summand und gibt das
 %   Ergebnis in Summe zurück. Wenn das feld leer oder kein Turm hält
@@ -83,9 +89,10 @@ addiereTurmWert([weiss|Brett],Feld,Summand,Summe):-
 addiereTurmWert(_,_,Summand,Summand).
 
 % ------------------------------------------------------------------------
-%  ermittleÜbersprungWert(+P,+Zug,-Wert)
+%  ermittleÜbersprungWert(+P,+Zug,?Wert).
 %   Gibt den Wert in Wert zurück, den ein übersprungener Turm hat.
 %   Türme, die befreit werden, sind wertvoller.
+
 ermittleÜbersprungWert(P,Zug,Wert):-
 	sub_atom(Zug,0,2,_,F1),
 	sub_atom(Zug,2,2,_,F2),
@@ -106,11 +113,12 @@ ermittleÜbersprungWert(P,Zug,Wert):-
 ermittleÜbersprungWert(_,_,0).
 
 % ------------------------------------------------------------------------
-%  summiereZugWerte(P,+ListeVonZügen,-Wert).
+%  summiereZugWerte(+P,+ListeVonZügen,?Wert).
 %   Summiert die Werte der Züge in ListeVonZügen auf und gibt das
 %   Ergebnis in Wert zurück.
 
 summiereZugWerte(_,[],0).
+
 summiereZugWerte(P,[H|T],Wert):-
 	summiereZugWerte(P,T,Rest),
 	istZug(H),
@@ -125,7 +133,7 @@ summiereZugWerte(P,[H|T],Wert):-
 	Wert is Rest + WertSprung + ÜberWert,!.
 
 % ------------------------------------------------------------------------
-%  addiereEigeneZüge(+P,+Farbe,+Summand,-Summe).
+%  addiereEigeneZüge(+P,+Farbe,+Summand,?Summe).
 %   Addiert für jeden eigenen möglichen Zug dessen Zugwert von
 %   Summand und wird in Summe gespeichert. Wenn es keine Feindzüge gibt,
 %   wird Summand in Summe gespeichert.
@@ -136,7 +144,7 @@ addiereEigeneZüge(P,Summand,Summe):-
 	Summe is Summand + Wert.
 
 % ------------------------------------------------------------------------
-%  addiereSiegWertung(+P,+Summand,-Summe).
+%  addiereSiegWertung(+P,+Summand,?Summe).
 %   Addiert die Bewertung für ein Siegbrett, wenn der Gegener keine Züge
 %   mehr auf P hat.
 
@@ -159,7 +167,7 @@ addiereSiegWertung([weiss|Brett],Summand,Summe):-
 addiereSiegWertung(_,Summand,Summand).
 
 % ---------------------------------------------------------------
-%  Startprädikat bewerte(+P,-Bewertung).
+%  Startprädikat bewerte(+P,?Bewertung).
 %   Bewertet das P und bindet das Ergebnis an Bewertung
 
 bewerte(P,Bewertung):-
@@ -240,11 +248,13 @@ bewerte(P,Bewertung):-
 	true.
 
 % ------------------------------------------------------------------------
-%  Startprädikat siegWertung(+P,-Wertung).
+%  Startprädikat siegWertung(+P,?Wertung).
 %   Gibt die Bewertung für die aktuelle Situation für beide Partein
 %   wieder. Dabei wird die Differenz zwischen der weissen und der
-%   schwarzen Wertung gegeben. Für schwarz ist dabei ein Wert gegen
-%   +Unendlich gut, für weiß ist ein Wert gegen -Unendlich ideal.
+%   schwarzen Wertung gegeben. Dabei hängt die Interpretation des
+%   Wertes von der Seite ab, die die KI spielt. Aus Sicht der KI ist
+%   eine Bewertung gegen +Unendlich gut, für den Gegner der KI ist eine
+%   Bewertung gegen -Unendlich gut.
 
 siegWertung([_|Brett],Wertung):-
 	ki(F),
