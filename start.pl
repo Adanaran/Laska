@@ -12,7 +12,6 @@
 :- [laskazug].
 :- [zugermittlung].
 :- [bewertung].
-:- [lki].
 :- [minimax].
 :- [alphabeta].
 
