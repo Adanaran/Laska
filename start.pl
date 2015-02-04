@@ -15,6 +15,10 @@
 :- [minimax].
 :- [alphabeta].
 
+%% --------------------------------------------------------------------
+% dialog.
+% Startet den Standarddialog für ein Zwei-Personen-Spiel ohne KI.
+%
 dialog :-
 	farbe(Farbe),
 	schreibeBrett(Farbe),
@@ -22,7 +26,11 @@ dialog :-
 	\+sieg(Farbe,Züge,' kann nicht mehr ziehen.'),
 	zugAuswahl(Farbe,Züge),
 	fail.
-
+%% --------------------------------------------------------------------
+% dialogKI(+Farbe).
+% Startet den Standarddialog für ein Ein-Personen-Spiel mit KI.
+% Die KI bekommt hierbei die übergebene Farbe zugeschrieben.
+%
 dialogKI(Farbe) :-
 	retractall(ki(_)),
 	assert(ki(Farbe)),

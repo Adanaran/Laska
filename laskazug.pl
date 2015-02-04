@@ -116,7 +116,7 @@ farbe(F) :- farbe(F).
 % sieg(+Farbe,+Züge,+Meldung)
 % Prüft, ob der Spieler der übergebenen Farbe dadurch verloren hat,
 % dass es keine Zugmöglichkeiten in Züge für ihn gibt.
-% Es folgt die Ausgabe, dass der Gegner gewonnen hat.
+% Es folgt die Ausgabe, dass der Gegner gewonnen hat mit der gegebenen Meldung als Begründung.
 sieg(Farbe,Züge,Meldung) :-
 	gegner(Farbe,Gegner),
 	Züge == [],
