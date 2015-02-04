@@ -1,7 +1,8 @@
 % laskazug.pl
-% Autor: Tim Röhrig
+% Autor: U. Meyer, Tim Röhrig
 %
 % Enthält Prädikate zum Durchführen von Zügen auf einem realen Brett.
+% Dabei wurden die bestehenden vorgegebenen Funktionalitäten um die Durchführung von Mehrfachsprüngen ergänzt.
 % Zudem sind Prädikate für den Spieldialog vorhanden.
 
 :- dynamic
@@ -13,6 +14,12 @@ fehler(nein,weiss).	% Schwarz beginnt das Spiel, s.u.!!
 	gesamtzeit/1.
 :-retractall(gesamtzeit(_)).
 gesamtzeit(0).
+
+%----------------------------------------------------------------
+% zugDurchführen(+Farbe,+SpielerFarbe,+P,+Züge).
+% Führt die Zuge der KI und des Spielers durch.
+% Überspringt die Berechnung der KI, wenn nur ein gültiger Zug möglich ist.
+% Übernimmt außerdem die Ermittlung der Zug- und Gesamtrechenzeit.
 zugDurchführen(Farbe,Farbe,_,Züge):-
 	statistics(walltime,_),
 	length(Züge,1),
@@ -55,45 +62,62 @@ zugDurchführen(Farbe,Farbe,P,_) :-
 
 zugDurchführen(_,Spieler,_,Züge):-
 	zugAuswahl(Spieler,Züge),!.
-
+%----------------------------------------------------------------
+% zugAuswahl(+Farbe,+Zugliste)
+% Zeigt dem menschlichen Spieler die möglichen Züge an und erwartete eine Eingabe.
+%
 zugAuswahl(Farbe,Zugliste) :-
 	nl,
 	writeZugliste(Zugliste,1),
 	read(Menüauswahl),
 	wähleZug(Farbe,Zugliste,Menüauswahl).
-
+%----------------------------------------------------------------
+% wähleZug(+Farbe,+Zugliste,+Auswahl)
+% Ermittelt aus der Eingabe des Spielers den durchzuführenden Zug 
+% anhang der Spielerfarbe und der Liste möglicher Züge.
+%
 wähleZug(Farbe,Zugliste,Auswahl):-
 	integer(Auswahl),
 	nth1(Auswahl,Zugliste,Zugfolge),
 	ziehen(Farbe,Zugfolge).
-
+% Aufgeben -> Gegner (KI) siegt
 wähleZug(Farbe,_,Auswahl):-
 	integer(Auswahl),
 	Auswahl =:= 0,
 	sieg(Farbe,[],' hat aufgegeben').
-
+% Ermittelt Zug anhand von Position in Zugliste oder als direkte Zugeingabe
 wähleZug(Farbe,Zugliste,Auswahl):-
 	member(Auswahl,Zugliste),
 	ziehen(Farbe,Auswahl);
 	ziehen(Farbe,ungültig).
-
+%----------------------------------------------------------------
+% writeZugliste(+Zugliste,+Index)
+% Gibt die in Zugliste gegebenen Zugmöglichkeiten in der Konsole aus
+% und fügt zuvor noch die Option der Aufgabe ein, um eine Partie jederzeit zu beenden.
+%
+% Aufgeben in die erste Zeile
 writeZugliste(_,1):-
-	write('0'), write(' - Aufgeben'), nl, fail.
 
+	write('0'), write(' - Aufgeben'), nl, fail.
+% Abbruchkriterium: keine Züge mehr
 writeZugliste([],_).
 
+% Ausgabe der Züge mit Index
 writeZugliste([Head|Tail],Index):-
 	write(Index), write(' - '), write(Head),nl,
 	Index2 is Index + 1,
 	writeZugliste(Tail,Index2).
 
-
 farbe(F) :- fehler(ja,F).
 farbe(schwarz) :- fehler(nein,weiss).
 farbe(weiss) :- fehler(nein,schwarz).
 farbe(F) :- farbe(F).
-
-sieg(Farbe,Züge, Meldung) :-
+%----------------------------------------------------------------
+% sieg(+Farbe,+Züge,+Meldung)
+% Prüft, ob der Spieler der übergebenen Farbe dadurch verloren hat,
+% dass es keine Zugmöglichkeiten in Züge für ihn gibt.
+% Es folgt die Ausgabe, dass der Gegner gewonnen hat.
+sieg(Farbe,Züge,Meldung) :-
 	gegner(Farbe,Gegner),
 	Züge == [],
 	nl,
